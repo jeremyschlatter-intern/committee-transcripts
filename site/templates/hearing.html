@@ -125,7 +125,7 @@
                 {% for excerpt in summary.key_excerpts %}
                 <blockquote class="excerpt">
                     <p>{{ excerpt.text }}</p>
-                    <cite><a class="ts" data-start="{{ excerpt.start }}" title="Jump to this point in video">[{{ format_timestamp(excerpt.start) }}]</a></cite>
+                    <cite><a class="ts" data-start="{{ excerpt.start | round(1) }}" title="Jump to this point in video">[{{ format_timestamp(excerpt.start) }}]</a></cite>
                 </blockquote>
                 {% endfor %}
             </div>

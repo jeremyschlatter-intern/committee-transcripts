@@ -44,6 +44,10 @@ def _is_procedural(sentence):
         r'\bopening\s+statement\b',
         r'\bpledge\s+of\s+allegiance\b',
         r'\bquestions\s+for\s+the\s+record\b',
+        r'\bthank\s+(the\s+)?chairman\b',
+        r'\bthank\s+(you\s+)?(ranking\s+member|chairman|mr\.\s+chairman)\b',
+        r'\bauthored\s+or\s+edited\b',
+        r'\bearned\s+(his|her)\s+(phd|ba|bs|jd|md)\b',
     ]
     for pattern in procedural_patterns:
         if re.search(pattern, s):
@@ -136,13 +140,17 @@ def extractive_summary(transcript, num_sentences=10):
     return ' '.join(selected)
 
 
-def extract_key_excerpts(transcript, num_excerpts=5):
+def extract_key_excerpts(transcript, num_excerpts=5, hearing_info=None):
     """Extract individual key excerpts with timestamps from transcript segments.
 
     Returns a list of dicts with 'text', 'start', 'end' for each excerpt.
     Unlike extractive_summary which returns a wall of text, this preserves
     structure for better display as individual blockquotes.
     """
+    # Extract title keywords for relevance scoring
+    title = hearing_info.get("title", "") if hearing_info else ""
+    title_words = set(w.lower() for w in re.findall(r'\b\w{4,}\b', title))
+
     segments = transcript.get("segments", [])
     if not segments:
         return []
@@ -240,6 +248,10 @@ def extract_key_excerpts(transcript, num_excerpts=5):
         if pl.startswith('thank you'):
             score -= 3
 
+        # Reward relevance to hearing title
+        title_matches = sum(1 for w in title_words if w in pl)
+        score += title_matches * 2
+
         # Position diversity - spread excerpts across the hearing
         position = i / len(passages) if passages else 0
         p["_position"] = position
@@ -286,7 +298,7 @@ def generate_summary(transcript, hearing_info=None):
     overview = extractive_summary(transcript, num_sentences=6)
 
     # Extract structured key excerpts with timestamps
-    key_excerpts = extract_key_excerpts(transcript, num_excerpts=5)
+    key_excerpts = extract_key_excerpts(transcript, num_excerpts=5, hearing_info=hearing_info)
 
     # Build hearing context
     context = ""
@@ -304,17 +316,53 @@ def generate_summary(transcript, hearing_info=None):
             context += "\n"
 
     # Pick the best excerpt for homepage display
-    # Prefer one that starts with uppercase and reads as a complete thought
+    # Prefer one that starts with uppercase, reads as a complete thought,
+    # and is relevant to the hearing title/topic
+    title = hearing_info.get("title", "") if hearing_info else ""
+    title_words = set(w.lower() for w in re.findall(r'\b\w{4,}\b', title))
+
     homepage_excerpt = ""
     if key_excerpts:
+        best_score = -999
         for ex in key_excerpts:
             text = ex["text"].strip()
-            first_char = text[0] if text else ""
-            first_word = text.split()[0].lower() if text.split() else ""
-            # Skip fragments that start lowercase or with filler words
-            if first_char.isupper() and first_word not in ('last', 'like', 'also'):
+            if not text:
+                continue
+            score = 0
+            first_char = text[0]
+            first_word = text.split()[0].lower()
+
+            # Must start with uppercase
+            if not first_char.isupper():
+                score -= 20
+            # Penalize filler words
+            if first_word in ('last', 'like', 'also', 'yeah', 'okay', 'well'):
+                score -= 10
+            # Penalize procedural
+            if _is_procedural(text):
+                score -= 20
+            # Penalize thanking language
+            tl = text.lower()
+            if 'want to thank' in tl or 'thank chairman' in tl or 'thank the chairman' in tl:
+                score -= 15
+            # Penalize bio/credential introductions
+            if 'authored or edited' in tl or 'earned his phd' in tl or 'earned her phd' in tl:
+                score -= 15
+
+            # Reward relevance to hearing title
+            text_lower = text.lower()
+            title_matches = sum(1 for w in title_words if w in text_lower)
+            score += title_matches * 3
+
+            # Reward substantive length
+            word_count = len(text.split())
+            if 20 <= word_count <= 60:
+                score += 3
+
+            if score > best_score:
+                best_score = score
                 homepage_excerpt = text
-                break
+
         if not homepage_excerpt:
             homepage_excerpt = key_excerpts[0]["text"]
 

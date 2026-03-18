@@ -1,16 +1,21 @@
 {
   "overview": "According to one EU Commission report, only 6 percent of global AI startup funding flows to EU firms, 6 percent. I'm so proud that we passed the Chips and Science Act, because the Chips and Science Act also set a foundation for investing in the United States of America and bringing more of the supply chain back to the United States of America to build on a future leader leadership that we already have, I believe, in the computing power. Our data centers built maintained and staffed by skilled American workers and body how modern technology not only stimulates economic growth and enhances national security but also improves human's lives. Careful reforms in permitting and regulatory process are necessary to accelerate infrastructure projects facilitate more rapid construction interconnections and energy for data centers. And I think to continue that leadership position and the influence that comes with that, and that all of the incredible benefits of the world using American technology products and services, the things that my colleagues have spoken about here, the need to win an infrastructure sensible regulation that does not slow us down, the sort of spirit of innovation and entrepreneurship that I think is a uniquely American thing in the world. I simply just call on all my colleagues that we look at the investments to the National Science Foundation, National Institutes of Health and Department of Energy Office of Science.",
-  "homepage_excerpt": "AI workloads involve trillions of simultaneous calculations demanding unprecedented computing power, advanced cooling systems, cutting edge chip technology, ultra high speed networks and accelerated storage. Since 2018 the computing power necessary for advanced AI models has multiplied approximately 100,000 fold. At CoreWave our facilities symbolize America's great tradition of innovation. Our data centers built maintained and staffed by skilled American workers and body how modern technology not only stimulates economic growth and enhances national security but also improves human's lives. We are at a critical juncture in the global AI competition.",
+  "homepage_excerpt": "What specific policies, and I know you mentioned policies as well for supply chains, would we need to adopt to help American companies overcome the supply chain issues and compete in international with our rivals? Thank you, Senator, for the question. There's no question that semiconductor supply chain and overall supply chains are really critical for us to win the AI race. I think from a semiconductor standpoint, the efforts that have been made to move manufacturing back to the United States have been positive.",
   "key_excerpts": [
+    {
+      "text": "By 2000, the United States has recorded five straight years of historic highs in productivity gains and investment growth. Hundreds of thousands of new jobs were created, and the United States became a top tech exporter with massive sums of private investment pouring into the US Digital Economy. By contrast, EU countries pursued a series of heavy-handed regulations that proved enormously In 1993, the United States and Europe had economies virtually identical in size. Today, the American economy is more than 50 percent larger than Europe's.",
+      "start": 958.36,
+      "end": 1009.0799999999999
+    },
     {
       "text": "AI workloads involve trillions of simultaneous calculations demanding unprecedented computing power, advanced cooling systems, cutting edge chip technology, ultra high speed networks and accelerated storage. Since 2018 the computing power necessary for advanced AI models has multiplied approximately 100,000 fold. At CoreWave our facilities symbolize America's great tradition of innovation. Our data centers built maintained and staffed by skilled American workers and body how modern technology not only stimulates economic growth and enhances national security but also improves human's lives. We are at a critical juncture in the global AI competition.",
       "start": 2470.92,
       "end": 2516.68
     },
     {
-      "text": "Clinic with the potential to unleash scientific research while we have mapped the human genome and we have rare diseases that can be solved. So there's a lot of positive, but we all know as you've all expressed, there's challenges that we need to get at with permitting reform. I'm a big believer in that. Energy development. Thank you, Mr. Smith for mentioning this with Wyndon Solar and the potential for more fusion and nuclear, but Wyndon Solar, the price going down dramatically in the last few years.",
-      "start": 4004.1200000000003,
-      "end": 4038.12
+      "text": "I think our industry, it's worth remembering, is only going to account for 15% of the total additional electricity the country is going to need. We are going to need electricity from a variety of sources. Today, the United States, 56% of our electricity comes from carbon. 44% comes from carbon free energy, meaning nuclear wind or solar. We need a broad-based approach and we need a diversity of resources. But again, 90% was energy that's not affordable. It's not abundant and it's not reliable.",
+      "start": 3769.08,
+      "end": 3801.52
     },
     {
       "text": "Well, you touched on a great point with energy. I think it's hard to overstate how important energy is to the future here. The eventually chips network gear that will be made by robots and will make that very efficient and will make that cheaper and cheaper. But an electron is an electron. Eventually the cost of intelligence, the cost of AI will converge to the cost of energy and the event. If it will be how much you can have the abundance of it will be limited by the abundance of energy.",
@@ -18,19 +23,14 @@
       "end": 5581.4
     },
     {
-      "text": "One of the things that seems to me the most consistent throughout history is every time the cost of energy falls, the quality of life goes up. And so doing a lot to make energy cheaper. In the short term, I think this probably looks like more natural gas. Although there are some applications where I think solar can really help in the medium term, I hope it's advanced nuclear, efficient and fusion. More energy is important well beyond AI. You know, in some sense, we have these dual revolutions going of AI and energy.",
-      "start": 6912.32,
-      "end": 6942.16
-    },
-    {
-      "text": "Justice, and it plays a significant role in cybersecurity of our country. I just came up from a budget hearing with the FBI Director, Dr. Patel, in which we covered cybersecurity threats. AI can, I think this is true, AI can be used on both sides of a cybersecurity attack, and it can be used to automate, automate fishing, malware creation, but machine learning can also increase our ability to detect and respond to cyber threats. What should Congress think about allocation of federal resources for cybersecurity and",
-      "start": 8284.18,
-      "end": 8323.38
+      "text": "What specific policies, and I know you mentioned policies as well for supply chains, would we need to adopt to help American companies overcome the supply chain issues and compete in international with our rivals? Thank you, Senator, for the question. There's no question that semiconductor supply chain and overall supply chains are really critical for us to win the AI race. I think from a semiconductor standpoint, the efforts that have been made to move manufacturing back to the United States have been positive.",
+      "start": 8046.4,
+      "end": 8078.12
     }
   ],
   "context": "**Committee**: Senate Commerce, Science, and Transportation\n\n",
   "statistics": {
-    "word_count": 30600,
+    "word_count": 85,
     "duration_minutes": 205,
     "segment_count": 2892
   }
