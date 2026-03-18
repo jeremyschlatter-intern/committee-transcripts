@@ -114,6 +114,29 @@ def load_all_hearings():
                 epub_path = fname
                 break
 
+        # Clean up field hearing location (address stored as JSON string)
+        loc = info.get("location", {})
+        if isinstance(loc, dict) and "address" in loc and not loc.get("building"):
+            try:
+                addr = json.loads(loc["address"])
+                parts = []
+                if addr.get("building_name"):
+                    parts.append(addr["building_name"])
+                if addr.get("street-address"):
+                    parts.append(addr["street-address"])
+                city_state = []
+                if addr.get("city"):
+                    city_state.append(addr["city"])
+                if addr.get("state"):
+                    city_state.append(addr["state"])
+                if city_state:
+                    parts.append(", ".join(city_state))
+                if addr.get("postal_code"):
+                    parts[-1] = parts[-1] + " " + addr["postal_code"]
+                info["location"] = {"building": " - ".join(parts[:2]), "room": ", ".join(parts[2:]) if len(parts) > 2 else ""}
+            except (json.JSONDecodeError, KeyError, TypeError):
+                pass
+
         hearings.append({
             "info": info,
             "transcript": transcript,
