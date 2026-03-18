@@ -6,6 +6,8 @@ import shutil
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
+import re
+
 from src.transcriber import format_timestamp
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,6 +16,66 @@ STATIC_DIR = os.path.join(BASE_DIR, "site", "static")
 OUTPUT_DIR = os.path.join(BASE_DIR, "docs")  # GitHub Pages uses /docs
 DATA_DIR = os.path.join(BASE_DIR, "data")
 HEARINGS_DIR = os.path.join(DATA_DIR, "hearings")
+
+
+def _is_noise_segment(text):
+    """Check if a transcript segment is noise/hallucination."""
+    text = text.strip().lower()
+    if len(text) < 3:
+        return True
+    # Single repeated common words (Whisper hallucination on silence)
+    noise_words = {'you', 'the', 'a', 'and', 'um', 'uh', 'oh', 'i', 'we', 'so', 'it'}
+    if text in noise_words:
+        return True
+    # Repetitive patterns: same word 3+ times
+    words = text.split()
+    if len(words) >= 3 and len(set(words)) == 1:
+        return True
+    # Very short nonsense
+    if len(words) <= 2 and all(w in noise_words for w in words):
+        return True
+    return False
+
+
+def _consolidate_segments(segments, group_seconds=30):
+    """Consolidate short segments into paragraphs grouped by time windows."""
+    if not segments:
+        return []
+
+    # Filter noise first
+    clean = [s for s in segments if not _is_noise_segment(s.get('text', ''))]
+    if not clean:
+        return []
+
+    # Group into paragraphs by time windows
+    paragraphs = []
+    current_group = [clean[0]]
+
+    for seg in clean[1:]:
+        prev_end = current_group[-1].get('end', current_group[-1].get('start', 0))
+        curr_start = seg.get('start', 0)
+        # Start new paragraph if gap > group_seconds or group is getting long
+        group_text = ' '.join(s['text'].strip() for s in current_group)
+        if (curr_start - prev_end > group_seconds) or len(group_text.split()) > 150:
+            paragraphs.append({
+                'start': current_group[0].get('start', 0),
+                'end': current_group[-1].get('end', current_group[-1].get('start', 0)),
+                'text': group_text,
+            })
+            current_group = [seg]
+        else:
+            current_group.append(seg)
+
+    # Don't forget the last group
+    if current_group:
+        group_text = ' '.join(s['text'].strip() for s in current_group)
+        paragraphs.append({
+            'start': current_group[0].get('start', 0),
+            'end': current_group[-1].get('end', current_group[-1].get('start', 0)),
+            'text': group_text,
+        })
+
+    return paragraphs
 
 
 def load_all_hearings():
@@ -79,7 +141,15 @@ def generate_site(base_url="/committee-transcripts/"):
     # Set up Jinja environment
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     env.filters['format_timestamp'] = format_timestamp
-    env.filters['format_date'] = lambda d: d[:10] if d else 'Unknown'
+    def _format_date(d):
+        if not d:
+            return 'Unknown'
+        try:
+            dt = datetime.fromisoformat(d.replace('Z', '+00:00'))
+            return dt.strftime('%B %-d, %Y')
+        except (ValueError, AttributeError):
+            return d[:10] if d else 'Unknown'
+    env.filters['format_date'] = _format_date
     env.filters['truncate_words'] = lambda s, n=30: ' '.join(s.split()[:n]) + ('...' if len(s.split()) > n else '')
 
     # Prepare output directory
@@ -131,9 +201,15 @@ def generate_site(base_url="/committee-transcripts/"):
     for h in hearings:
         event_id = h["event_id"]
 
+        # Consolidate transcript segments into paragraphs
+        raw_segments = h["transcript"].get("segments", [])
+        consolidated = _consolidate_segments(raw_segments)
+        display_transcript = dict(h["transcript"])
+        display_transcript["paragraphs"] = consolidated
+
         html = hearing_template.render(
             hearing=h["info"],
-            transcript=h["transcript"],
+            transcript=display_transcript,
             summary=h["summary"],
             epub_filename=h["epub_filename"],
             format_timestamp=format_timestamp,

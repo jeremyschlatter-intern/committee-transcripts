@@ -27,45 +27,111 @@ def chunk_text(text, max_chars=4000):
     return chunks
 
 
-def extractive_summary(transcript, num_sentences=10):
-    """Create a simple extractive summary by picking key sentences.
+def _is_procedural(sentence):
+    """Check if a sentence is procedural/boilerplate rather than substantive."""
+    s = sentence.lower()
+    procedural_patterns = [
+        r'\bcommittee\s+(will\s+)?come\s+to\s+order\b',
+        r'\bunanimous\s+consent\b',
+        r'\bwithout\s+objection\b',
+        r'\bso\s+ordered\b',
+        r'\bhearing\s+is\s+(now\s+)?adjourned\b',
+        r'\byield\s+(back|my\s+time)\b',
+        r'\brecognize[ds]?\s+(the\s+)?(gentleman|gentlewoman|gentlelady|member)\b',
+        r'\bfive\s+(legislative\s+)?days?\b',
+        r'\bsubmit\s+(additional\s+)?written\s+questions?\b',
+        r'\bopening\s+statement\b',
+        r'\bpledge\s+of\s+allegiance\b',
+    ]
+    for pattern in procedural_patterns:
+        if re.search(pattern, s):
+            return True
+    return False
 
-    This is a lightweight fallback that doesn't require an API.
-    It picks sentences based on position (intro, conclusion) and length.
+
+def _is_noise_text(text):
+    """Check if text is mostly Whisper noise/hallucination."""
+    text = text.strip().lower()
+    if len(text) < 10:
+        return True
+    # Check for repetitive word patterns
+    words = text.split()
+    if len(words) >= 4:
+        unique_ratio = len(set(words)) / len(words)
+        if unique_ratio < 0.15:  # Less than 15% unique words = noise
+            return True
+    return False
+
+
+def extractive_summary(transcript, num_sentences=10):
+    """Create an extractive summary by picking substantive sentences.
+
+    Filters out procedural language, noise, and repetitive content.
+    Picks sentences that contain actual policy discussion or testimony.
     """
     text = transcript.get("text", "")
     if not text:
         return "No transcript text available."
 
-    # Clean up common Whisper artifacts at start (dead air, "you you you...")
-    text = re.sub(r'^(\s*(you|the|and|a|um|uh)\s*){3,}', '', text, flags=re.IGNORECASE)
+    # Clean up common Whisper artifacts (dead air transcribed as noise)
+    text = re.sub(r'^(\s*(you|the|and|a|um|uh|oh|I)\s*){3,}', '', text, flags=re.IGNORECASE)
+    # Remove repetitive word sequences anywhere in text
+    text = re.sub(r'(\b\w+\b)(\s+\1){4,}', r'\1', text)
 
     # Split into sentences
     sentences = re.split(r'(?<=[.!?])\s+', text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 20]
-    # Filter out sentences that are mostly repetitive words
-    sentences = [s for s in sentences if not re.match(r'^(\w+\s+)\1{3,}', s)]
+    sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
 
-    if len(sentences) <= num_sentences:
-        return ' '.join(sentences)
+    # Filter out noise and repetitive sentences
+    clean_sentences = []
+    for s in sentences:
+        if _is_noise_text(s):
+            continue
+        if _is_procedural(s):
+            continue
+        # Skip very short or very long sentences
+        word_count = len(s.split())
+        if word_count < 5 or word_count > 200:
+            continue
+        clean_sentences.append(s)
 
-    # Pick: first 2, last 2, and longest from the middle
-    selected = []
-    selected.extend(sentences[:2])
-    selected.extend(sentences[-2:])
+    if not clean_sentences:
+        # Fallback to any non-noise sentences
+        clean_sentences = [s for s in sentences if not _is_noise_text(s) and len(s.split()) > 5]
 
-    # From the middle, pick sentences by length (longer = more substantive)
-    middle = sentences[2:-2]
-    middle_sorted = sorted(middle, key=len, reverse=True)
-    remaining = num_sentences - len(selected)
-    # Pick the longest sentences from the middle, preserving original order
-    middle_picks = set()
-    for s in middle_sorted[:remaining]:
-        middle_picks.add(middle.index(s))
-    for idx in sorted(middle_picks):
-        selected.insert(-2, middle[idx])
+    if len(clean_sentences) <= num_sentences:
+        return ' '.join(clean_sentences)
 
-    return ' '.join(selected[:num_sentences])
+    # Score sentences by substantive content indicators
+    scored = []
+    for i, s in enumerate(clean_sentences):
+        score = 0
+        sl = s.lower()
+        # Substantive topic keywords boost score
+        topic_words = ['billion', 'million', 'percent', 'funding', 'budget', 'program',
+                       'legislation', 'amendment', 'investigation', 'oversight', 'reform',
+                       'security', 'policy', 'department', 'secretary', 'director',
+                       'cost', 'infrastructure', 'military', 'education', 'health',
+                       'housing', 'environment', 'energy', 'technology', 'court',
+                       'report', 'found', 'evidence', 'concern', 'challenge', 'threat']
+        for w in topic_words:
+            if w in sl:
+                score += 2
+        # Longer sentences tend to be more substantive (up to a point)
+        word_count = len(s.split())
+        score += min(word_count / 10, 5)
+        # Position: early and late sentences in testimony tend to be key points
+        position = i / len(clean_sentences)
+        if position < 0.15 or position > 0.85:
+            score += 2
+        scored.append((score, i, s))
+
+    # Pick top-scoring sentences, preserving original order
+    scored.sort(key=lambda x: x[0], reverse=True)
+    top_indices = sorted([x[1] for x in scored[:num_sentences]])
+    selected = [clean_sentences[i] for i in top_indices]
+
+    return ' '.join(selected)
 
 
 def generate_summary(transcript, hearing_info=None):

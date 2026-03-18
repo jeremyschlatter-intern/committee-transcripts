@@ -4,11 +4,11 @@
 
 {% block head %}
 <style>
-    .transcript-segment { padding: 4px 0; border-bottom: 1px solid #f0f0f0; }
-    .transcript-segment:hover { background: #f8fafc; }
-    .ts { color: #718096; font-family: monospace; font-size: 0.85em; cursor: pointer; }
+    .transcript-paragraph { padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
+    .transcript-paragraph:hover { background: #f8fafc; }
+    .ts { color: #718096; font-family: monospace; font-size: 0.8em; cursor: pointer; display: inline-block; margin-bottom: 0.25rem; }
     .ts:hover { color: #2c5282; }
-    .segment-text { margin-left: 0.5em; }
+    .transcript-paragraph .segment-text { margin: 0; line-height: 1.7; }
 </style>
 {% endblock %}
 
@@ -52,7 +52,13 @@
     <div class="hearing-actions">
         {% if hearing.videos %}
         {% for v in hearing.videos %}
+        {% if 'youtube.com' in v.url or 'youtu.be' in v.url %}
+        <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-primary">Watch on YouTube</a>
+        {% elif 'congress.gov' in v.url %}
+        <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-secondary">View on Congress.gov</a>
+        {% else %}
         <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-primary">Watch Video</a>
+        {% endif %}
         {% endfor %}
         {% endif %}
         {% if epub_filename %}
@@ -110,10 +116,10 @@
         </div>
 
         <div class="transcript" id="transcript">
-            {% for segment in transcript.segments %}
-            <div class="transcript-segment" data-start="{{ segment.start }}">
-                <span class="ts">[{{ format_timestamp(segment.start) }}]</span>
-                <span class="segment-text">{{ segment.text }}</span>
+            {% for para in transcript.paragraphs %}
+            <div class="transcript-paragraph" data-start="{{ para.start }}">
+                <span class="ts">[{{ format_timestamp(para.start) }}]</span>
+                <p class="segment-text">{{ para.text }}</p>
             </div>
             {% endfor %}
         </div>
@@ -131,33 +137,35 @@ function toggleTimestamps() {
 }
 
 function copyTranscript() {
-    const segments = document.querySelectorAll('.transcript-segment');
+    const paras = document.querySelectorAll('.transcript-paragraph');
     let text = '';
-    segments.forEach(seg => {
-        const ts = seg.querySelector('.ts').textContent;
-        const content = seg.querySelector('.segment-text').textContent;
-        text += ts + ' ' + content + '\n';
+    paras.forEach(p => {
+        const ts = p.querySelector('.ts').textContent;
+        const content = p.querySelector('.segment-text').textContent;
+        text += ts + ' ' + content + '\n\n';
     });
-    navigator.clipboard.writeText(text).then(() => {
-        alert('Transcript copied to clipboard!');
+    navigator.clipboard.writeText(text.trim()).then(() => {
+        const btn = document.querySelector('[onclick="copyTranscript()"]');
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 2000);
     });
 }
 
 document.getElementById('transcript-search').addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase();
-    document.querySelectorAll('.transcript-segment').forEach(function(seg) {
-        const text = seg.querySelector('.segment-text').textContent.toLowerCase();
+    document.querySelectorAll('.transcript-paragraph').forEach(function(para) {
+        const text = para.querySelector('.segment-text').textContent.toLowerCase();
         if (query === '') {
-            seg.style.display = '';
-            seg.querySelector('.segment-text').innerHTML = seg.querySelector('.segment-text').textContent;
+            para.style.display = '';
+            para.querySelector('.segment-text').innerHTML = para.querySelector('.segment-text').textContent;
         } else if (text.includes(query)) {
-            seg.style.display = '';
-            // Highlight matches
-            const original = seg.querySelector('.segment-text').textContent;
+            para.style.display = '';
+            const original = para.querySelector('.segment-text').textContent;
             const regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-            seg.querySelector('.segment-text').innerHTML = original.replace(regex, '<mark>$1</mark>');
+            para.querySelector('.segment-text').innerHTML = original.replace(regex, '<mark>$1</mark>');
         } else {
-            seg.style.display = 'none';
+            para.style.display = 'none';
         }
     });
 });
