@@ -1,0 +1,37 @@
+{
+  "eventId": "118881",
+  "title": "\u201cOversight of the Office of Special Counsel Jack Smith\u201d",
+  "date": "2026-01-22T15:00:00Z",
+  "chamber": "House",
+  "congress": 119,
+  "type": "Hearing",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Rayburn House Office Building",
+    "room": "2141"
+  },
+  "committees": [
+    {
+      "name": "House Judiciary",
+      "systemCode": "hsju00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [
+    {
+      "name": "Mr. Jack Smith",
+      "position": "Former Special Counsel",
+      "organization": "U.S. Department of Justice"
+    }
+  ],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/house-event/118881",
+      "title": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=EdHfPqCTOgs",
+      "title": ""
+    }
+  ]
+}

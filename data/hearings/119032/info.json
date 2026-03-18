@@ -1,0 +1,51 @@
+{
+  "eventId": "119032",
+  "title": "Broken Promises: Failures of the Little Rock Housing Authority and the Impact on Residents",
+  "date": "2026-03-13T14:00:00Z",
+  "chamber": "House",
+  "congress": 119,
+  "type": "Hearing",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "address": "{\"building_name\": \"Central Arkansas Library System (CALS)\", \"street-address\": \"100 Rock Street\", \"city\": \"Little Rock\", \"state\": \"AR\", \"postal_code\": \"72202\"}"
+  },
+  "committees": [
+    {
+      "name": "House Financial Services Subcommittee on Oversight and Investigations",
+      "systemCode": "hsba09",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [
+    {
+      "name": "Ms. Amanda Wentz",
+      "position": "Senior Assistant Attorney General",
+      "organization": "Office of the Attorney General"
+    },
+    {
+      "name": "Mr. Kerry Wright",
+      "position": "Commissioner",
+      "organization": "Little Rock Housing Commission"
+    },
+    {
+      "name": "Dr. Nadine Jarmon",
+      "position": "Executive Director",
+      "organization": "Metropolitan Housing Alliance"
+    },
+    {
+      "name": "Ms. Joan Adcock",
+      "position": "Director",
+      "organization": "Board of Directors"
+    }
+  ],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/house-event/119032",
+      "title": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=d_Db7k5ig7k",
+      "title": ""
+    }
+  ]
+}
