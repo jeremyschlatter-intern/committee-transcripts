@@ -1,0 +1,32 @@
+{
+  "eventId": "337435",
+  "title": "Hearings to examine the state of K-12 education.",
+  "date": "2025-09-18T14:00:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Dirksen Senate Office Building",
+    "room": "430"
+  },
+  "committees": [
+    {
+      "name": "Senate Health, Education, Labor, and Pensions",
+      "systemCode": "sshr00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/337435",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=help&filename=help091825",
+      "title": ""
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/senate-event/337435"
+}

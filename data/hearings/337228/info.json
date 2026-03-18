@@ -1,0 +1,32 @@
+{
+  "eventId": "337228",
+  "title": "Hearings to examine from Wall Street to Web3, focusing on tomorrow's digital asset markets.",
+  "date": "2025-07-09T14:15:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Dirksen Senate Office Building",
+    "room": "538"
+  },
+  "committees": [
+    {
+      "name": "Senate Banking, Housing, and Urban Affairs",
+      "systemCode": "ssbk00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/337228",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=banking&filename=banking070925",
+      "title": ""
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/senate-event/337228"
+}

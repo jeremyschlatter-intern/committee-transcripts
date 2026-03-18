@@ -1,0 +1,32 @@
+{
+  "eventId": "336923",
+  "title": "Hearings to examine winning the AI race, focusing on strengthening United States capabilities in computing and innovation.",
+  "date": "2025-05-08T14:00:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Russell Senate Office Building",
+    "room": "253"
+  },
+  "committees": [
+    {
+      "name": "Senate Commerce, Science, and Transportation",
+      "systemCode": "sscm00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/336923",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=commerce&filename=commerce050825",
+      "title": ""
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/senate-event/336923"
+}
