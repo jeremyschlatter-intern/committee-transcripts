@@ -1,0 +1,31 @@
+{
+  "eventId": "337055",
+  "title": "Hearings to examine the privacy and national security implications of the 23andMe bankruptcy.",
+  "date": "2025-06-11T14:15:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Dirksen Senate Office Building",
+    "room": "226"
+  },
+  "committees": [
+    {
+      "name": "Senate Judiciary",
+      "systemCode": "ssju00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/337055",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=judiciary&filename=judiciary061125",
+      "title": ""
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "eventId": "337474",
+  "title": "Hearings to examine AI's potential to support patients, workers, children, and families.",
+  "date": "2025-10-09T14:00:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Dirksen Senate Office Building",
+    "room": "430"
+  },
+  "committees": [
+    {
+      "name": "Senate Health, Education, Labor, and Pensions",
+      "systemCode": "sshr00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/337474",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=help&filename=help100925",
+      "title": ""
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/senate-event/337474"
+}

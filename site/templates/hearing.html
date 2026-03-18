@@ -6,8 +6,8 @@
 <style>
     .transcript-paragraph { padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
     .transcript-paragraph:hover { background: #f8fafc; }
-    .ts { color: #718096; font-family: monospace; font-size: 0.8em; cursor: pointer; display: inline-block; margin-bottom: 0.25rem; }
-    .ts:hover { color: #2c5282; }
+    .ts { color: #718096; font-family: monospace; font-size: 0.8em; cursor: pointer; display: inline-block; margin-bottom: 0.25rem; text-decoration: none; }
+    .ts:hover { color: #2c5282; text-decoration: underline; }
     .transcript-paragraph .segment-text { margin: 0; line-height: 1.7; }
 </style>
 {% endblock %}
@@ -137,10 +137,11 @@
             {% endif %}
         </div>
 
-        <div class="transcript" id="transcript">
+        <div class="transcript" id="transcript"
+             {% for v in hearing.videos %}{% if 'youtube.com' in v.url or 'youtu.be' in v.url %}data-youtube-url="{{ v.url }}"{% endif %}{% endfor %}>
             {% for para in transcript.paragraphs %}
             <div class="transcript-paragraph" data-start="{{ para.start }}">
-                <span class="ts">[{{ format_timestamp(para.start) }}]</span>
+                <a class="ts" title="Jump to this point in video">[{{ format_timestamp(para.start) }}]</a>
                 <p class="segment-text">{{ para.text }}</p>
             </div>
             {% endfor %}
@@ -173,6 +174,29 @@ function copyTranscript() {
         setTimeout(() => btn.textContent = orig, 2000);
     });
 }
+
+// Timestamp-to-video linking
+document.querySelectorAll('.ts').forEach(function(ts) {
+    ts.addEventListener('click', function(e) {
+        e.preventDefault();
+        const para = ts.closest('.transcript-paragraph');
+        const startSeconds = Math.floor(parseFloat(para.dataset.start));
+        const transcriptEl = document.getElementById('transcript');
+        const youtubeUrl = transcriptEl.dataset.youtubeUrl;
+        if (youtubeUrl) {
+            // Extract video ID and create timestamped URL
+            const match = youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            if (match) {
+                window.open('https://www.youtube.com/watch?v=' + match[1] + '&t=' + startSeconds + 's', '_blank');
+                return;
+            }
+        }
+        // Fallback: copy timestamp to clipboard
+        navigator.clipboard.writeText(ts.textContent);
+        ts.style.color = '#2c5282';
+        setTimeout(() => ts.style.color = '', 1000);
+    });
+});
 
 document.getElementById('transcript-search').addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase();

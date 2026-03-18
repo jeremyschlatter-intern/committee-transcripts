@@ -1,0 +1,31 @@
+{
+  "eventId": "337500",
+  "title": "Hearings to examine Big Tech and silencing Americans.",
+  "date": "2025-10-08T14:30:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Meeting",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Russell Senate Office Building",
+    "room": "253"
+  },
+  "committees": [
+    {
+      "name": "Senate Commerce, Science, and Transportation",
+      "systemCode": "sscm00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/337500",
+      "title": ""
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=commerce&filename=commerce100825",
+      "title": ""
+    }
+  ]
+}
