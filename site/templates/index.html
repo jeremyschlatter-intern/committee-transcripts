@@ -52,7 +52,9 @@
                     {% endif %}
 
                     {% if hearing.summary %}
-                    {% if hearing.summary.key_excerpts %}
+                    {% if hearing.summary.homepage_excerpt %}
+                    <p class="hearing-excerpt">{{ hearing.summary.homepage_excerpt | truncate_words(40) }}</p>
+                    {% elif hearing.summary.key_excerpts %}
                     <p class="hearing-excerpt">{{ hearing.summary.key_excerpts[0].text | truncate_words(40) }}</p>
                     {% else %}
                     <p class="hearing-excerpt">{{ hearing.summary.overview | truncate_words(40) }}</p>

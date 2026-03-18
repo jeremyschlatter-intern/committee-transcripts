@@ -303,8 +303,24 @@ def generate_summary(transcript, hearing_info=None):
                 context += f"- {', '.join(p for p in parts if p)}\n"
             context += "\n"
 
+    # Pick the best excerpt for homepage display
+    # Prefer one that starts with uppercase and reads as a complete thought
+    homepage_excerpt = ""
+    if key_excerpts:
+        for ex in key_excerpts:
+            text = ex["text"].strip()
+            first_char = text[0] if text else ""
+            first_word = text.split()[0].lower() if text.split() else ""
+            # Skip fragments that start lowercase or with filler words
+            if first_char.isupper() and first_word not in ('last', 'like', 'also'):
+                homepage_excerpt = text
+                break
+        if not homepage_excerpt:
+            homepage_excerpt = key_excerpts[0]["text"]
+
     return {
         "overview": overview,
+        "homepage_excerpt": homepage_excerpt,
         "key_excerpts": key_excerpts,
         "context": context,
         "statistics": {
