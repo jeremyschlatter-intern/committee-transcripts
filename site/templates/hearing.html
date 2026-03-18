@@ -43,13 +43,13 @@
 
         {% if hearing.location %}
         <p class="hearing-location">
-            {% if hearing.location is mapping %}
-                {% if hearing.location.room %}{{ hearing.location.room }}{% endif %}
-                {% if hearing.location.building %}, {{ hearing.location.building }}{% endif %}
-                {% if hearing.location.address %}{{ hearing.location.address }}{% endif %}
-            {% else %}
+            {%- if hearing.location is mapping -%}
+                {%- if hearing.location.room %}{{ hearing.location.room }}{% endif -%}
+                {%- if hearing.location.building %}, {{ hearing.location.building }}{% endif -%}
+                {%- if hearing.location.address %}{{ hearing.location.address }}{% endif -%}
+            {%- elif hearing.location is string -%}
                 {{ hearing.location }}
-            {% endif %}
+            {%- endif -%}
         </p>
         {% endif %}
     </header>

@@ -133,7 +133,8 @@ def load_all_hearings():
                     parts.append(", ".join(city_state))
                 if addr.get("postal_code"):
                     parts[-1] = parts[-1] + " " + addr["postal_code"]
-                info["location"] = {"building": " - ".join(parts[:2]), "room": ", ".join(parts[2:]) if len(parts) > 2 else ""}
+                # Format as "Building Name, Street Address, City, State ZIP"
+                info["location"] = ", ".join(parts)
             except (json.JSONDecodeError, KeyError, TypeError):
                 pass
 
@@ -284,8 +285,77 @@ def generate_site(base_url="/committee-transcripts/"):
         f.write(html)
     print("  Generated: about.html")
 
+    # Generate RSS feed
+    _generate_rss(hearings, base_url, OUTPUT_DIR)
+    print("  Generated: feed.xml")
+
     print(f"\nSite generated at: {OUTPUT_DIR}")
     return OUTPUT_DIR
+
+
+def _generate_rss(hearings, base_url, output_dir):
+    """Generate an RSS feed of recent hearing transcripts."""
+    site_url = "https://jeremyschlatter-intern.github.io/committee-transcripts/"
+    items = []
+    for h in hearings[:20]:  # Latest 20
+        event_id = h["event_id"]
+        info = h["info"]
+        title = _clean_title(info.get("title", "Untitled")) or info.get("title", "Untitled")
+        date = info.get("date", "")
+        chamber = info.get("chamber", "")
+        committees = ", ".join(c.get("name", "") for c in info.get("committees", []))
+        link = f"{site_url}hearings/{event_id}.html"
+
+        # Build description
+        desc_parts = []
+        if chamber:
+            desc_parts.append(f"{chamber} hearing")
+        if committees:
+            desc_parts.append(f"Committee: {committees}")
+        if h.get("summary", {}) and h["summary"].get("overview"):
+            overview = h["summary"]["overview"]
+            # Truncate overview
+            words = overview.split()[:50]
+            desc_parts.append(" ".join(words) + ("..." if len(overview.split()) > 50 else ""))
+
+        description = ". ".join(desc_parts) if desc_parts else title
+
+        # Format date for RSS (RFC 822)
+        pub_date = ""
+        if date:
+            try:
+                dt = datetime.fromisoformat(date.replace('Z', '+00:00'))
+                pub_date = dt.strftime("%a, %d %b %Y %H:%M:%S +0000")
+            except (ValueError, AttributeError):
+                pass
+
+        # Escape XML
+        title_xml = title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        desc_xml = description.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+        item = f"""    <item>
+      <title>{title_xml}</title>
+      <link>{link}</link>
+      <guid>{link}</guid>
+      <description>{desc_xml}</description>
+      {f'<pubDate>{pub_date}</pubDate>' if pub_date else ''}
+    </item>"""
+        items.append(item)
+
+    rss = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Committee Proceeding Transcripts</title>
+    <link>{site_url}</link>
+    <description>Free, AI-generated transcripts of congressional committee hearings</description>
+    <language>en-us</language>
+    <lastBuildDate>{datetime.now().strftime("%a, %d %b %Y %H:%M:%S +0000")}</lastBuildDate>
+{chr(10).join(items)}
+  </channel>
+</rss>"""
+
+    with open(os.path.join(output_dir, "feed.xml"), 'w') as f:
+        f.write(rss)
 
 
 def _slugify(text):
