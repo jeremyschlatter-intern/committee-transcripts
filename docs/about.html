@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Committee Proceeding Transcripts</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="nav-icon">&#x1f3db;</span>
+                Committee Transcripts
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        
+<div class="container">
+    <h1>About This Project</h1>
+
+    <section class="section about-section">
+        <h2>The Problem</h2>
+        <p>
+            Congressional committee hearings are a vital part of the legislative process, yet
+            official transcripts can take a year or more to be published by Congress. Private
+            transcription services exist, but they charge fees that put this public information
+            behind a paywall.
+        </p>
+        <p>
+            This creates a significant transparency gap: by the time official transcripts are
+            available, the policy discussions they document may no longer be timely or relevant
+            to current debates.
+        </p>
+    </section>
+
+    <section class="section about-section">
+        <h2>Our Solution</h2>
+        <p>
+            This site uses AI speech recognition technology to automatically generate transcripts
+            from committee hearing video streams, typically within hours of a hearing taking place.
+            These transcripts are then published here for free public access.
+        </p>
+        <h3>How It Works</h3>
+        <ol>
+            <li><strong>Discovery</strong>: We monitor the Congress.gov API for new committee
+                meetings with available video.</li>
+            <li><strong>Audio Extraction</strong>: Audio is extracted from official committee
+                video streams hosted on YouTube and Senate committee websites.</li>
+            <li><strong>Transcription</strong>: The audio is processed using OpenAI's Whisper
+                speech recognition model to produce timestamped transcripts.</li>
+            <li><strong>Summary</strong>: An overview of each hearing's content is generated
+                to help users quickly assess relevance.</li>
+            <li><strong>Publication</strong>: Transcripts are published to this website, with
+                EPUB versions available for download and offline reading.</li>
+        </ol>
+    </section>
+
+    <section class="section about-section">
+        <h2>Important Disclaimers</h2>
+        <ul>
+            <li>These transcripts are <strong>auto-generated</strong> and may contain errors,
+                particularly with proper names, technical terms, and crosstalk.</li>
+            <li>They should not be cited as official records. For official transcripts,
+                see the <a href="https://www.govinfo.gov/" target="_blank" rel="noopener">Government Publishing Office</a>.</li>
+            <li>Speaker identification is approximate and may not always be accurate.</li>
+        </ul>
+    </section>
+
+    <section class="section about-section">
+        <h2>Data Sources</h2>
+        <ul>
+            <li><a href="https://api.congress.gov/" target="_blank" rel="noopener">Congress.gov API</a> &mdash; Hearing metadata, committee information, witness lists</li>
+            <li>Committee YouTube channels &mdash; House committee hearing video</li>
+            <li><a href="https://www.senate.gov/isvp/" target="_blank" rel="noopener">Senate ISVP</a> &mdash; Senate committee hearing video</li>
+            <li><a href="https://senatecommitteehearings.com/" target="_blank" rel="noopener">Senate Committee Hearings Database</a> &mdash; Senate hearing discovery</li>
+        </ul>
+    </section>
+
+    <section class="section about-section">
+        <h2>Open Source</h2>
+        <p>
+            This project demonstrates the potential for AI to make government more transparent
+            and accessible. The transcription pipeline is open source and can be run by anyone
+            to process additional hearings.
+        </p>
+    </section>
+
+    <p class="footer-meta">Last updated: March 17, 2026 at 08:11 PM</p>
+</div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
+            <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
+            
+            <p class="footer-meta">Last updated: March 17, 2026 at 08:11 PM</p>
+            
+        </div>
+    </footer>
+
+    
+</body>
+</html>

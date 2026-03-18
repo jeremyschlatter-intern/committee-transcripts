@@ -1,0 +1,31 @@
+{
+  "eventId": "119018",
+  "title": "Energy, Installations, and Environment Hearing",
+  "date": "2026-03-04T20:30:00Z",
+  "chamber": "House",
+  "congress": 119,
+  "type": "Hearing",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Rayburn House Office Building",
+    "room": "2118"
+  },
+  "committees": [
+    {
+      "name": "House Armed Services Subcommittee on Readiness",
+      "systemCode": "hsas03",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/house-event/119018",
+      "title": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=VvtF9nLCOxs",
+      "title": ""
+    }
+  ]
+}

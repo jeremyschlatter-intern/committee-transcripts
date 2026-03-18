@@ -1,0 +1,52 @@
+{
+  "eventId": "118923",
+  "title": "\u201cEurope\u2019s Threat to American Speech and Innovation: Part II\u201d",
+  "date": "2026-02-04T15:00:00Z",
+  "chamber": "House",
+  "congress": 119,
+  "type": "Hearing",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Rayburn House Office Building",
+    "room": "2141"
+  },
+  "committees": [
+    {
+      "name": "House Judiciary",
+      "systemCode": "hsju00",
+      "chamber": ""
+    }
+  ],
+  "witnesses": [
+    {
+      "name": "Mr. Lorcan Price",
+      "position": "Legal Counsel",
+      "organization": "Alliance Defending Freedom International"
+    },
+    {
+      "name": "Mr. Graham Linehan",
+      "position": "",
+      "organization": ""
+    },
+    {
+      "name": "Ms. P\u00e4ivi R\u00e4s\u00e4nen",
+      "position": "Member of the Finnish Parliament",
+      "organization": ""
+    },
+    {
+      "name": "Mr. Deepinder Mayell",
+      "position": "Executive Director",
+      "organization": "The American Civil Liberites Union of Minnesota"
+    }
+  ],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/house-event/118923",
+      "title": ""
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=vLHJJ_wjADU",
+      "title": ""
+    }
+  ]
+}

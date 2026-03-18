@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Committee Proceeding Transcripts</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="nav-icon">&#x1f3db;</span>
+                Committee Transcripts
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        
+<div class="container">
+    <div class="hero">
+        <h1>Committee Proceeding Transcripts</h1>
+        <p class="hero-subtitle">Free, immediate transcripts of congressional committee hearings</p>
+        <p class="hero-description">
+            Official committee hearing transcripts can take a year or more to be published.
+            This site provides AI-generated transcripts within hours of a hearing, making
+            congressional proceedings accessible to everyone.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">2</span>
+                <span class="stat-label">Hearings Transcribed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">2</span>
+                <span class="stat-label">Committees</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="hearing-search" placeholder="Search hearings by title, committee, or keyword..." class="search-input">
+    </div>
+
+    <section class="section">
+        <h2>Recent Hearings</h2>
+        <div class="hearing-list">
+            
+            <article class="hearing-card" data-searchable="energy, installations, and environment hearing house armed services subcommittee on readiness">
+                <div class="hearing-card-header">
+                    <div class="hearing-meta">
+                        <span class="badge badge-house">House</span>
+                        <time>2026-03-04</time>
+                    </div>
+                    <h3>
+                        <a href="hearings/119018.html">Energy, Installations, and Environment Hearing</a>
+                    </h3>
+                </div>
+                <div class="hearing-card-body">
+                    
+                    <p class="hearing-committee">
+                        
+                        <a href="committees/house-armed-services-subcommittee-on-readiness.html">House Armed Services Subcommittee on Readiness</a>
+                        
+                    </p>
+                    
+
+                    
+                    <p class="hearing-excerpt">you you you you you you you you you that's up committee will come to order I ask unanimous consent that the chair be authorized to declare a recess at any time without objection so ordered I ask unanimous consent...</p>
+                    <div class="hearing-stats">
+                        <span>~88 min</span>
+                        <span>14,021 words</span>
+                        
+                        <span class="epub-badge">EPUB</span>
+                        
+                    </div>
+                    
+
+                    
+                </div>
+            </article>
+            
+            <article class="hearing-card" data-searchable="“europe’s threat to american speech and innovation: part ii” house judiciary">
+                <div class="hearing-card-header">
+                    <div class="hearing-meta">
+                        <span class="badge badge-house">House</span>
+                        <time>2026-02-04</time>
+                    </div>
+                    <h3>
+                        <a href="hearings/118923.html">“Europe’s Threat to American Speech and Innovation: Part II”</a>
+                    </h3>
+                </div>
+                <div class="hearing-card-body">
+                    
+                    <p class="hearing-committee">
+                        
+                        <a href="committees/house-judiciary.html">House Judiciary</a>
+                        
+                    </p>
+                    
+
+                    
+                    <p class="hearing-excerpt">you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you you...</p>
+                    <div class="hearing-stats">
+                        <span>~196 min</span>
+                        <span>27,869 words</span>
+                        
+                        <span class="epub-badge">EPUB</span>
+                        
+                    </div>
+                    
+
+                    
+                    <details class="witness-preview">
+                        <summary>4 witnesses</summary>
+                        <ul>
+                            
+                            <li>Mr. Lorcan Price, Alliance Defending Freedom International</li>
+                            
+                            <li>Mr. Graham Linehan</li>
+                            
+                            <li>Ms. Päivi Räsänen</li>
+                            
+                            <li>Mr. Deepinder Mayell, The American Civil Liberites Union of Minnesota</li>
+                            
+                            
+                        </ul>
+                    </details>
+                    
+                </div>
+            </article>
+            
+        </div>
+    </section>
+
+    
+    <section class="section">
+        <h2>Committees</h2>
+        <div class="committee-grid">
+            
+            <a href="committees/house-armed-services-subcommittee-on-readiness.html" class="committee-card">
+                <span class="badge badge-"></span>
+                <h3>House Armed Services Subcommittee on Readiness</h3>
+                <p>1 hearing</p>
+            </a>
+            
+            <a href="committees/house-judiciary.html" class="committee-card">
+                <span class="badge badge-"></span>
+                <h3>House Judiciary</h3>
+                <p>1 hearing</p>
+            </a>
+            
+        </div>
+    </section>
+    
+</div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
+            <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
+            
+            <p class="footer-meta">Last updated: March 17, 2026 at 08:11 PM</p>
+            
+        </div>
+    </footer>
+
+    
+<script>
+document.getElementById('hearing-search').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.hearing-card').forEach(function(card) {
+        const searchable = card.getAttribute('data-searchable');
+        card.style.display = searchable.includes(query) ? '' : 'none';
+    });
+});
+</script>
+
+</body>
+</html>
