@@ -54,6 +54,8 @@
         {% for v in hearing.videos %}
         {% if 'youtube.com' in v.url or 'youtu.be' in v.url %}
         <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-primary">Watch on YouTube</a>
+        {% elif 'senate.gov/isvp' in v.url %}
+        <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-primary">Watch on Senate.gov</a>
         {% elif 'congress.gov' in v.url %}
         <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-secondary">View on Congress.gov</a>
         {% else %}

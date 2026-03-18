@@ -116,6 +116,51 @@ def download_audio_from_youtube(video_id, output_dir, filename=None):
     raise RuntimeError("Failed to produce audio file")
 
 
+SENATE_STREAM_INFO = {
+    "ag": {"id": "2036803", "msl3": "agriculture"},
+    "aging": {"id": "2036801", "msl3": "aging"},
+    "approps": {"id": "2036802", "msl3": "appropriations"},
+    "armed": {"id": "2036800", "msl3": "armedservices"},
+    "banking": {"id": "2036799", "msl3": "banking"},
+    "budget": {"id": "2036798", "msl3": "budget"},
+    "commerce": {"id": "2036779", "msl3": "commerce"},
+    "energy": {"id": "2036797", "msl3": "energy"},
+    "epw": {"id": "2036783", "msl3": "environment"},
+    "ethics": {"id": "2036796", "msl3": "ethics"},
+    "finance": {"id": "2036795", "msl3": "finance_finance"},
+    "foreign": {"id": "2036794", "msl3": "foreignrelations"},
+    "govtaff": {"id": "2036792", "msl3": "hsgac"},
+    "help": {"id": "2036793", "msl3": "help"},
+    "indian": {"id": "2036791", "msl3": "indianaffairs"},
+    "intel": {"id": "2036790", "msl3": "intelligence"},
+    "judiciary": {"id": "2036788", "msl3": "judiciary"},
+    "rules": {"id": "2036787", "msl3": "rules"},
+    "smbiz": {"id": "2036786", "msl3": "smallbusiness"},
+    "vetaff": {"id": "2036785", "msl3": "veteransaffairs"},
+}
+
+
+def resolve_senate_isvp_url(isvp_url):
+    """Convert a Senate ISVP URL to an HLS stream URL.
+
+    Input:  https://www.senate.gov/isvp/?comm=help&filename=help031226
+    Output: https://www-senate-gov-media-srs.akamaized.net/hls/live/{id}/{comm}/{filename}/master.m3u8
+    """
+    match = re.search(r'comm=(\w+).*filename=(\w+)', isvp_url)
+    if not match:
+        return None
+
+    comm = match.group(1)
+    filename = match.group(2)
+
+    stream_info = SENATE_STREAM_INFO.get(comm)
+    if not stream_info:
+        return None
+
+    stream_id = stream_info["id"]
+    return f"https://www-senate-gov-media-srs.akamaized.net/hls/live/{stream_id}/{comm}/{filename}/master.m3u8"
+
+
 def download_audio_from_hls(stream_url, output_dir, filename):
     """Download audio from an HLS stream (Senate Akamai).
 

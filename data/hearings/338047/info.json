@@ -1,0 +1,31 @@
+{
+  "eventId": "338047",
+  "title": "Transparency and Trust: Foreign Influence in Higher Education",
+  "date": "2026-03-12T14:00:00Z",
+  "chamber": "Senate",
+  "congress": 119,
+  "type": "Hearing",
+  "meetingStatus": "Scheduled",
+  "location": {
+    "building": "Dirksen Senate Office Building",
+    "room": "430"
+  },
+  "committees": [
+    {
+      "name": "Senate Health, Education, Labor, and Pensions",
+      "systemCode": "sshr00",
+      "chamber": "Senate"
+    }
+  ],
+  "witnesses": [],
+  "videos": [
+    {
+      "url": "https://www.congress.gov/event/119th-Congress/senate-event/338047",
+      "title": "Congress.gov Event Page"
+    },
+    {
+      "url": "https://www.senate.gov/isvp/?comm=help&filename=help031226",
+      "title": "Senate Video"
+    }
+  ]
+}
