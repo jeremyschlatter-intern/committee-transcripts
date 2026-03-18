@@ -165,12 +165,15 @@ def generate_site(base_url="/committee-transcripts/"):
     # Build committee index
     committees = {}
     for h in hearings:
+        hearing_chamber = h["info"].get("chamber", "")
         for c in h["info"].get("committees", []):
             name = c.get("name", "Unknown")
+            # Inherit chamber from hearing if missing on committee
+            chamber = c.get("chamber", "") or hearing_chamber
             if name not in committees:
                 committees[name] = {
                     "name": name,
-                    "chamber": c.get("chamber", ""),
+                    "chamber": chamber,
                     "hearings": [],
                 }
             committees[name]["hearings"].append(h)
