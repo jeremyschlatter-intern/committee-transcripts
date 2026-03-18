@@ -365,6 +365,9 @@ def generate_summary(transcript, hearing_info=None):
 
         if not homepage_excerpt:
             homepage_excerpt = key_excerpts[0]["text"]
+        # Ensure first letter is capitalized
+        if homepage_excerpt and homepage_excerpt[0].islower():
+            homepage_excerpt = homepage_excerpt[0].upper() + homepage_excerpt[1:]
 
     return {
         "overview": overview,
