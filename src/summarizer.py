@@ -37,9 +37,14 @@ def extractive_summary(transcript, num_sentences=10):
     if not text:
         return "No transcript text available."
 
+    # Clean up common Whisper artifacts at start (dead air, "you you you...")
+    text = re.sub(r'^(\s*(you|the|and|a|um|uh)\s*){3,}', '', text, flags=re.IGNORECASE)
+
     # Split into sentences
     sentences = re.split(r'(?<=[.!?])\s+', text)
     sentences = [s.strip() for s in sentences if len(s.strip()) > 20]
+    # Filter out sentences that are mostly repetitive words
+    sentences = [s for s in sentences if not re.match(r'^(\w+\s+)\1{3,}', s)]
 
     if len(sentences) <= num_sentences:
         return ' '.join(sentences)

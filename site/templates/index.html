@@ -39,14 +39,14 @@
                         <time>{{ hearing.info.date | format_date }}</time>
                     </div>
                     <h3>
-                        <a href="hearings/{{ hearing.event_id }}.html">{{ hearing.info.title }}</a>
+                        <a href="{{ base_url }}hearings/{{ hearing.event_id }}.html">{{ hearing.info.title }}</a>
                     </h3>
                 </div>
                 <div class="hearing-card-body">
                     {% if hearing.info.committees %}
                     <p class="hearing-committee">
                         {% for c in hearing.info.committees %}
-                        <a href="committees/{{ c.name | lower | replace(' ', '-') | truncate(80, True, '') }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
+                        <a href="{{ base_url }}committees/{{ c.name | lower | replace(' ', '-') | truncate(80, True, '') }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     </p>
                     {% endif %}
@@ -86,7 +86,7 @@
         <h2>Committees</h2>
         <div class="committee-grid">
             {% for name, data in committees.items() | sort %}
-            <a href="committees/{{ name | lower | replace(' ', '-') | truncate(80, True, '') }}.html" class="committee-card">
+            <a href="{{ base_url }}committees/{{ name | lower | replace(' ', '-') | truncate(80, True, '') }}.html" class="committee-card">
                 <span class="badge badge-{{ data.chamber | lower }}">{{ data.chamber }}</span>
                 <h3>{{ name }}</h3>
                 <p>{{ data.hearings | length }} hearing{{ 's' if data.hearings | length > 1 }}</p>

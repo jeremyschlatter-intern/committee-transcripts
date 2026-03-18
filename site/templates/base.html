@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Committee Proceeding Transcripts{% endblock %}</title>
-    <link rel="stylesheet" href="{{ root_path | default('/') }}static/css/style.css">
+    <link rel="stylesheet" href="{{ base_url }}static/css/style.css">
     {% block head %}{% endblock %}
 </head>
 <body>
     <nav class="nav">
         <div class="nav-container">
-            <a href="{{ root_path | default('/') }}" class="nav-brand">
+            <a href="{{ base_url }}" class="nav-brand">
                 <span class="nav-icon">&#x1f3db;</span>
                 Committee Transcripts
             </a>
             <div class="nav-links">
-                <a href="{{ root_path | default('/') }}">Home</a>
-                <a href="{{ root_path | default('/') }}about.html">About</a>
+                <a href="{{ base_url }}">Home</a>
+                <a href="{{ base_url }}about.html">About</a>
             </div>
         </div>
     </nav>

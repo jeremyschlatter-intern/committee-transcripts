@@ -65,7 +65,7 @@ def load_all_hearings():
     return hearings
 
 
-def generate_site():
+def generate_site(base_url="/committee-transcripts/"):
     """Generate the complete static site."""
     print("Generating static site...")
 
@@ -105,13 +105,19 @@ def generate_site():
                 }
             committees[name]["hearings"].append(h)
 
+    # Common template variables
+    common_vars = {
+        "base_url": base_url,
+        "generated_at": datetime.now().strftime("%B %d, %Y at %I:%M %p"),
+    }
+
     # Generate index page
     template = env.get_template("index.html")
     html = template.render(
         hearings=hearings,
         committees=committees,
-        generated_at=datetime.now().strftime("%B %d, %Y at %I:%M %p"),
         total_hearings=len(hearings),
+        **common_vars,
     )
     with open(os.path.join(OUTPUT_DIR, "index.html"), 'w') as f:
         f.write(html)
@@ -131,6 +137,7 @@ def generate_site():
             summary=h["summary"],
             epub_filename=h["epub_filename"],
             format_timestamp=format_timestamp,
+            **common_vars,
         )
 
         hearing_page = os.path.join(hearings_out, f"{event_id}.html")
@@ -156,6 +163,7 @@ def generate_site():
         html = committee_template.render(
             committee=committee_data,
             format_timestamp=format_timestamp,
+            **common_vars,
         )
         with open(os.path.join(committees_out, f"{slug}.html"), 'w') as f:
             f.write(html)
@@ -165,8 +173,8 @@ def generate_site():
     # Generate about page
     about_template = env.get_template("about.html")
     html = about_template.render(
-        generated_at=datetime.now().strftime("%B %d, %Y at %I:%M %p"),
         total_hearings=len(hearings),
+        **common_vars,
     )
     with open(os.path.join(OUTPUT_DIR, "about.html"), 'w') as f:
         f.write(html)
