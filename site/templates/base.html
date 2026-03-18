@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Committee Proceeding Transcripts{% endblock %}</title>
+    <link rel="stylesheet" href="{{ root_path | default('/') }}static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="{{ root_path | default('/') }}" class="nav-brand">
+                <span class="nav-icon">&#x1f3db;</span>
+                Committee Transcripts
+            </a>
+            <div class="nav-links">
+                <a href="{{ root_path | default('/') }}">Home</a>
+                <a href="{{ root_path | default('/') }}about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
+            <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
+            {% if generated_at %}
+            <p class="footer-meta">Last updated: {{ generated_at }}</p>
+            {% endif %}
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

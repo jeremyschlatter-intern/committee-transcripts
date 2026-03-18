@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% set root_path = "../" %}
+
+{% block title %}{{ hearing.title }} | Committee Transcripts{% endblock %}
+
+{% block head %}
+<style>
+    .transcript-segment { padding: 4px 0; border-bottom: 1px solid #f0f0f0; }
+    .transcript-segment:hover { background: #f8fafc; }
+    .ts { color: #718096; font-family: monospace; font-size: 0.85em; cursor: pointer; }
+    .ts:hover { color: #2c5282; }
+    .segment-text { margin-left: 0.5em; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav class="breadcrumb">
+        <a href="../">Home</a> &raquo;
+        {% if hearing.committees %}
+        {% for c in hearing.committees %}
+        <a href="../committees/{{ c.name | lower | replace(' ', '-') | truncate(80, True, '') }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+        &raquo;
+        {% endif %}
+        <span>Transcript</span>
+    </nav>
+
+    <header class="hearing-header">
+        <div class="hearing-meta">
+            <span class="badge badge-{{ hearing.chamber | lower }}">{{ hearing.chamber }}</span>
+            <time>{{ hearing.date | format_date }}</time>
+            {% if hearing.type %}
+            <span class="badge">{{ hearing.type }}</span>
+            {% endif %}
+        </div>
+        <h1>{{ hearing.title }}</h1>
+
+        {% if hearing.committees %}
+        <p class="hearing-committee-name">
+            {% for c in hearing.committees %}{{ c.name }}{% if not loop.last %}; {% endif %}{% endfor %}
+        </p>
+        {% endif %}
+
+        {% if hearing.location %}
+        <p class="hearing-location">
+            {% if hearing.location.room %}{{ hearing.location.room }}{% endif %}
+            {% if hearing.location.building %}, {{ hearing.location.building }}{% endif %}
+        </p>
+        {% endif %}
+    </header>
+
+    <div class="hearing-actions">
+        {% if hearing.videos %}
+        {% for v in hearing.videos %}
+        <a href="{{ v.url }}" target="_blank" rel="noopener" class="btn btn-primary">Watch Video</a>
+        {% endfor %}
+        {% endif %}
+        {% if epub_filename %}
+        <a href="{{ epub_filename }}" class="btn btn-secondary" download>Download EPUB</a>
+        {% endif %}
+        <button class="btn btn-secondary" onclick="copyTranscript()">Copy Transcript</button>
+    </div>
+
+    {% if hearing.witnesses %}
+    <section class="section">
+        <h2>Witnesses</h2>
+        <div class="witness-list">
+            {% for w in hearing.witnesses %}
+            <div class="witness">
+                <strong>{{ w.name }}</strong>
+                {% if w.position %}<br><span class="witness-title">{{ w.position }}</span>{% endif %}
+                {% if w.organization %}<br><span class="witness-org">{{ w.organization }}</span>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if summary %}
+    <section class="section summary-section">
+        <h2>Summary</h2>
+        <div class="summary-box">
+            <div class="summary-stats">
+                <span>Duration: ~{{ summary.statistics.duration_minutes }} minutes</span>
+                <span>Words: {{ "{:,}".format(summary.statistics.word_count) }}</span>
+                <span>Segments: {{ "{:,}".format(summary.statistics.segment_count) }}</span>
+            </div>
+            <p>{{ summary.overview }}</p>
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="section">
+        <div class="transcript-controls">
+            <h2>Full Transcript</h2>
+            <div class="transcript-options">
+                <label>
+                    <input type="checkbox" id="show-timestamps" checked onchange="toggleTimestamps()">
+                    Show timestamps
+                </label>
+                <input type="text" id="transcript-search" placeholder="Search transcript..." class="search-input search-small">
+            </div>
+        </div>
+
+        <div class="transcript-notice">
+            <em>Auto-generated transcript. May contain errors in transcription, particularly with names and technical terms.</em>
+            {% if transcript.source %}
+            <br><small>Source: {{ transcript.source }}</small>
+            {% endif %}
+        </div>
+
+        <div class="transcript" id="transcript">
+            {% for segment in transcript.segments %}
+            <div class="transcript-segment" data-start="{{ segment.start }}">
+                <span class="ts">[{{ format_timestamp(segment.start) }}]</span>
+                <span class="segment-text">{{ segment.text }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleTimestamps() {
+    const show = document.getElementById('show-timestamps').checked;
+    document.querySelectorAll('.ts').forEach(el => {
+        el.style.display = show ? '' : 'none';
+    });
+}
+
+function copyTranscript() {
+    const segments = document.querySelectorAll('.transcript-segment');
+    let text = '';
+    segments.forEach(seg => {
+        const ts = seg.querySelector('.ts').textContent;
+        const content = seg.querySelector('.segment-text').textContent;
+        text += ts + ' ' + content + '\n';
+    });
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Transcript copied to clipboard!');
+    });
+}
+
+document.getElementById('transcript-search').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.transcript-segment').forEach(function(seg) {
+        const text = seg.querySelector('.segment-text').textContent.toLowerCase();
+        if (query === '') {
+            seg.style.display = '';
+            seg.querySelector('.segment-text').innerHTML = seg.querySelector('.segment-text').textContent;
+        } else if (text.includes(query)) {
+            seg.style.display = '';
+            // Highlight matches
+            const original = seg.querySelector('.segment-text').textContent;
+            const regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+            seg.querySelector('.segment-text').innerHTML = original.replace(regex, '<mark>$1</mark>');
+        } else {
+            seg.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

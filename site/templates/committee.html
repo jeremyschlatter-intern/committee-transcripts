@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% set root_path = "../" %}
+
+{% block title %}{{ committee.name }} | Committee Transcripts{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav class="breadcrumb">
+        <a href="../">Home</a> &raquo;
+        <span>{{ committee.name }}</span>
+    </nav>
+
+    <header>
+        <span class="badge badge-{{ committee.chamber | lower }}">{{ committee.chamber }}</span>
+        <h1>{{ committee.name }}</h1>
+        <p>{{ committee.hearings | length }} hearing{{ 's' if committee.hearings | length > 1 }} transcribed</p>
+    </header>
+
+    <section class="section">
+        <div class="hearing-list">
+            {% for hearing in committee.hearings %}
+            <article class="hearing-card">
+                <div class="hearing-card-header">
+                    <div class="hearing-meta">
+                        <time>{{ hearing.info.date | format_date }}</time>
+                    </div>
+                    <h3>
+                        <a href="../hearings/{{ hearing.event_id }}.html">{{ hearing.info.title }}</a>
+                    </h3>
+                </div>
+                <div class="hearing-card-body">
+                    {% if hearing.summary %}
+                    <p class="hearing-excerpt">{{ hearing.summary.overview | truncate_words(40) }}</p>
+                    <div class="hearing-stats">
+                        <span>~{{ hearing.summary.statistics.duration_minutes }} min</span>
+                        <span>{{ "{:,}".format(hearing.summary.statistics.word_count) }} words</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

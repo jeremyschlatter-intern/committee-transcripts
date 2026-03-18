@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Committee Proceeding Transcripts{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero">
+        <h1>Committee Proceeding Transcripts</h1>
+        <p class="hero-subtitle">Free, immediate transcripts of congressional committee hearings</p>
+        <p class="hero-description">
+            Official committee hearing transcripts can take a year or more to be published.
+            This site provides AI-generated transcripts within hours of a hearing, making
+            congressional proceedings accessible to everyone.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">{{ total_hearings }}</span>
+                <span class="stat-label">Hearings Transcribed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">{{ committees | length }}</span>
+                <span class="stat-label">Committees</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="hearing-search" placeholder="Search hearings by title, committee, or keyword..." class="search-input">
+    </div>
+
+    <section class="section">
+        <h2>Recent Hearings</h2>
+        <div class="hearing-list">
+            {% for hearing in hearings %}
+            <article class="hearing-card" data-searchable="{{ hearing.info.title | lower }} {{ hearing.info.committees | map(attribute='name') | join(' ') | lower }}">
+                <div class="hearing-card-header">
+                    <div class="hearing-meta">
+                        <span class="badge badge-{{ hearing.info.chamber | lower }}">{{ hearing.info.chamber }}</span>
+                        <time>{{ hearing.info.date | format_date }}</time>
+                    </div>
+                    <h3>
+                        <a href="hearings/{{ hearing.event_id }}.html">{{ hearing.info.title }}</a>
+                    </h3>
+                </div>
+                <div class="hearing-card-body">
+                    {% if hearing.info.committees %}
+                    <p class="hearing-committee">
+                        {% for c in hearing.info.committees %}
+                        <a href="committees/{{ c.name | lower | replace(' ', '-') | truncate(80, True, '') }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+
+                    {% if hearing.summary %}
+                    <p class="hearing-excerpt">{{ hearing.summary.overview | truncate_words(40) }}</p>
+                    <div class="hearing-stats">
+                        <span>~{{ hearing.summary.statistics.duration_minutes }} min</span>
+                        <span>{{ "{:,}".format(hearing.summary.statistics.word_count) }} words</span>
+                        {% if hearing.epub_filename %}
+                        <span class="epub-badge">EPUB</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if hearing.info.witnesses %}
+                    <details class="witness-preview">
+                        <summary>{{ hearing.info.witnesses | length }} witness{{ 'es' if hearing.info.witnesses | length > 1 }}</summary>
+                        <ul>
+                            {% for w in hearing.info.witnesses[:5] %}
+                            <li>{{ w.name }}{% if w.organization %}, {{ w.organization }}{% endif %}</li>
+                            {% endfor %}
+                            {% if hearing.info.witnesses | length > 5 %}
+                            <li>...and {{ hearing.info.witnesses | length - 5 }} more</li>
+                            {% endif %}
+                        </ul>
+                    </details>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if committees %}
+    <section class="section">
+        <h2>Committees</h2>
+        <div class="committee-grid">
+            {% for name, data in committees.items() | sort %}
+            <a href="committees/{{ name | lower | replace(' ', '-') | truncate(80, True, '') }}.html" class="committee-card">
+                <span class="badge badge-{{ data.chamber | lower }}">{{ data.chamber }}</span>
+                <h3>{{ name }}</h3>
+                <p>{{ data.hearings | length }} hearing{{ 's' if data.hearings | length > 1 }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('hearing-search').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.hearing-card').forEach(function(card) {
+        const searchable = card.getAttribute('data-searchable');
+        card.style.display = searchable.includes(query) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}

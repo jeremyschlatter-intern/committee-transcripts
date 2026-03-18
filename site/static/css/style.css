@@ -1,0 +1,463 @@
+/* Base Reset & Variables */
+:root {
+    --navy: #1a365d;
+    --blue: #2c5282;
+    --light-blue: #ebf4ff;
+    --red: #c53030;
+    --light-red: #fff5f5;
+    --gray-50: #f7fafc;
+    --gray-100: #edf2f7;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e0;
+    --gray-500: #718096;
+    --gray-600: #4a5568;
+    --gray-700: #2d3748;
+    --gray-800: #1a202c;
+    --text: #2d3748;
+    --border: #e2e8f0;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--gray-50);
+}
+
+/* Navigation */
+.nav {
+    background: var(--navy);
+    color: white;
+    padding: 0.75rem 0;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-icon { font-size: 1.3rem; }
+
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+.nav-links a:hover { color: white; }
+
+/* Main Content */
+.main { min-height: calc(100vh - 160px); }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: white;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.hero-description {
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    opacity: 0.85;
+    line-height: 1.7;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1.5rem;
+}
+
+.stat { text-align: center; }
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Search */
+.search-bar { margin-bottom: 2rem; }
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: white;
+    transition: border-color 0.2s;
+}
+.search-input:focus {
+    outline: none;
+    border-color: var(--blue);
+}
+.search-small {
+    width: 250px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Sections */
+.section {
+    margin-bottom: 2rem;
+}
+.section h2 {
+    font-size: 1.4rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+}
+
+/* Hearing Cards */
+.hearing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hearing-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.hearing-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--blue);
+}
+
+.hearing-card-header {
+    padding: 1rem 1.25rem 0.5rem;
+}
+
+.hearing-card-header h3 {
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+.hearing-card-header h3 a {
+    color: var(--navy);
+    text-decoration: none;
+}
+.hearing-card-header h3 a:hover { color: var(--blue); text-decoration: underline; }
+
+.hearing-card-body {
+    padding: 0 1.25rem 1rem;
+}
+
+.hearing-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gray-500);
+}
+
+.hearing-committee { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 0.5rem; }
+.hearing-committee a { color: var(--blue); text-decoration: none; }
+.hearing-committee a:hover { text-decoration: underline; }
+
+.hearing-excerpt {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.hearing-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.epub-badge {
+    background: var(--blue);
+    color: white;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.15em 0.6em;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+.badge-house { background: var(--light-blue); color: var(--blue); }
+.badge-senate { background: var(--light-red); color: var(--red); }
+
+/* Witness */
+.witness-preview { margin-top: 0.5rem; font-size: 0.9rem; }
+.witness-preview summary { cursor: pointer; color: var(--gray-500); }
+.witness-preview ul { margin: 0.5rem 0 0 1.5rem; }
+.witness-preview li { margin-bottom: 0.25rem; font-size: 0.85rem; }
+
+.witness-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.witness {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+.witness-title { color: var(--gray-600); font-size: 0.9rem; }
+.witness-org { color: var(--gray-500); font-size: 0.85rem; font-style: italic; }
+
+/* Committee Grid */
+.committee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.committee-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.committee-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--blue);
+}
+
+.committee-card h3 {
+    font-size: 0.95rem;
+    margin: 0.5rem 0 0.25rem;
+    color: var(--navy);
+}
+
+.committee-card p {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+}
+
+/* Hearing Detail Page */
+.breadcrumb {
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin-bottom: 1.5rem;
+}
+.breadcrumb a { color: var(--blue); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+.hearing-header {
+    margin-bottom: 1.5rem;
+}
+.hearing-header h1 {
+    font-size: 1.6rem;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-top: 0.5rem;
+}
+.hearing-committee-name { color: var(--gray-600); font-size: 1rem; margin-top: 0.5rem; }
+.hearing-location { color: var(--gray-500); font-size: 0.9rem; }
+
+.hearing-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.btn-primary {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+}
+.btn-primary:hover { background: var(--navy); }
+.btn-secondary {
+    background: white;
+    color: var(--blue);
+    border-color: var(--border);
+}
+.btn-secondary:hover { border-color: var(--blue); }
+
+/* Summary */
+.summary-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+.summary-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    margin-bottom: 0.75rem;
+}
+
+/* Transcript */
+.transcript-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.transcript-options {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.transcript-options label {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.transcript-notice {
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin: 1rem 0;
+}
+
+.transcript {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+mark {
+    background: #fefcbf;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* About Page */
+.about-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+.about-section h2 {
+    border: none;
+    padding: 0;
+    margin-bottom: 0.75rem;
+}
+.about-section h3 {
+    color: var(--gray-700);
+    margin: 1rem 0 0.5rem;
+}
+.about-section p { margin-bottom: 0.75rem; }
+.about-section ol, .about-section ul {
+    margin: 0.5rem 0 0.75rem 1.5rem;
+}
+.about-section li { margin-bottom: 0.5rem; }
+.about-section a { color: var(--blue); }
+
+/* Footer */
+.footer {
+    background: var(--gray-800);
+    color: var(--gray-300);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}
+.footer .container { text-align: center; }
+.footer-meta { font-size: 0.8rem; color: var(--gray-500); margin-top: 0.5rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-number { font-size: 2rem; }
+    .hearing-header h1 { font-size: 1.3rem; }
+    .transcript-controls { flex-direction: column; align-items: flex-start; }
+    .search-small { width: 100%; }
+    .committee-grid { grid-template-columns: 1fr; }
+    .witness-list { grid-template-columns: 1fr; }
+}
