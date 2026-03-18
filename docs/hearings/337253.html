@@ -25,6 +25,7 @@
             </a>
             <div class="nav-links">
                 <a href="/committee-transcripts/">Home</a>
+                <a href="/committee-transcripts/search.html">Search</a>
                 <a href="/committee-transcripts/about.html">About</a>
                 <a href="/committee-transcripts/feed.xml" title="RSS Feed">RSS</a>
             </div>
@@ -81,7 +82,8 @@
         
         <a href="hearing_337253.epub" class="btn btn-secondary" download>Download EPUB</a>
         
-        <button class="btn btn-secondary" onclick="copyTranscript()">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(true)">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(false)">Copy (Plain Text)</button>
     </div>
 
     
@@ -98,7 +100,36 @@
                 <span>Segments: 1,366</span>
             </div>
             <p class="excerpts-note"><em>Selected substantive passages from the hearing (auto-extracted):</em></p>
-            <p>Now the FBI and the Department of Homeland Security regularly prosecute individuals who engage in exactly the same kind of behavior using platforms like Lyme Wire or Napster in the old days using a process called torrenting. While AI can be an incredible tool that unlocks further creativity, writers, artist musicians, and others are rightfully concerned about what technology means to them personally. These are just a handful of the many, many millions of copyrighted books and publications that some of the world's largest and wealthiest corporations, meta, open AI, anthropic, and others, knowingly and intentionally, pirated from illicit online marketplaces for financial gain and to seek a competitive advantage in AI. As tech companies scrambled to release generative AI models and to catch out with open AI's chat GPT, many of them turned to illicit online repositories to take tens of millions, if not hundreds of millions, of books and scholarly publications and articles for free instead of buying them or licensing them from copyright owners. By pirating these works, AI companies have built a multi-billion dollar industry that is projected to be a trillion dollar industry in the next few years without paying a single cent to the authors whose works power their products or the publishers responsible for introducing those works to the public here and abroad. That is the very question that Judge Chabria ruled on, and to assume that as his piracy is begging the question with all due respect, it is begging the question that the courts are the appropriate determiners of, and that can be appealed, and I'm sure it will be appealed, but here the question of whether acquiring for a punitive fair use purpose is unlawful.</p>
+            
+            <div class="key-excerpts">
+                
+                <blockquote class="excerpt">
+                    <p>topic we can't overlook. America's creative industries, including software, music, movies, literature, collectively contribute over a trillion dollars to our economy each year employ millions of people. While AI can be an incredible tool that unlocks further creativity, writers, artist musicians, and others are rightfully concerned about what technology means to them personally. Should AI companies be able to use their materials freely as, quote, fair use? Or should they receive compensation when their works are used to train AI models?</p>
+                    <cite><a class="ts" data-start="1462.1200000000001" title="Jump to this point in video">[24:22]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>generate diverse texts and perform a wide range of functions. And as Judge also recognized, the technology at issue was among the most transformative many of us will see in our lifetimes. Now the history of AI development strongly supports this conclusion. It is important to understand why AI researchers at universities began training AI models on large data sets. This practice originated not at AI companies, not at Big Tech, but at universities where AI researchers discovered a key insight.</p>
+                    <cite><a class="ts" data-start="3160.72" title="Jump to this point in video">[52:40]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>It has pirated well over 200 terabytes of copyrighted material from multiple, I don't call them shadow libraries because they're not libraries, but illicit criminal enterprises. And how much does it pay the copyright holders for these works that it's used to your knowledge? If nothing, zero. So billions of works, billions of books like Mr. Baldacci's zero payment, if Metta were to pay, do you have any idea what the cost might be? I mean, did they ever, to your knowledge and your discovery, do they ever explore paying?</p>
+                    <cite><a class="ts" data-start="3727.72" title="Jump to this point in video">[1:02:07]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>darn well enforce the individual rights on which the nation's founded. I mean, it's just a thought. Senator Welch, would you like to- am I catching him off guard? I was handed in the line. Well, you're welcome to ask questions if you'd like. Anyone but especially a colleague, Senator, and the chair of the committee, you know, mid-expression of righteous outrage and indignation with which I'm aligned. So thank you very much. Thank you. And I appreciate you calling this hearing because this is incredibly important.</p>
+                    <cite><a class="ts" data-start="4826.56" title="Jump to this point in video">[1:20:26]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>A societally beneficial reason. All right, maybe creating a world's repository of generative AI companies is that, but it doesn't seem to me that it squares with the other things that we think of as fair use. What's well-established fair use? Education, criticism, commentary, first amendment purposes that we consider valuable and necessary and that are done in good faith. I educate in good faith. I don't want to have to clear all those copyrights to educate. Okay, great. We allow you to do that.</p>
+                    <cite><a class="ts" data-start="5515.160000000001" title="Jump to this point in video">[1:31:55]</a></cite>
+                </blockquote>
+                
+            </div>
+            
         </div>
     </section>
     
@@ -571,7 +602,7 @@
             <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
             <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
             
-            <p class="footer-meta">Last updated: March 17, 2026 at 11:14 PM</p>
+            <p class="footer-meta">Last updated: March 17, 2026 at 11:25 PM</p>
             
         </div>
     </footer>
@@ -585,16 +616,20 @@ function toggleTimestamps() {
     });
 }
 
-function copyTranscript() {
+function copyTranscript(includeTimestamps) {
     const paras = document.querySelectorAll('.transcript-paragraph');
     let text = '';
     paras.forEach(p => {
-        const ts = p.querySelector('.ts').textContent;
         const content = p.querySelector('.segment-text').textContent;
-        text += ts + ' ' + content + '\n\n';
+        if (includeTimestamps) {
+            const ts = p.querySelector('.ts').textContent;
+            text += ts + ' ' + content + '\n\n';
+        } else {
+            text += content + '\n\n';
+        }
     });
     navigator.clipboard.writeText(text.trim()).then(() => {
-        const btn = document.querySelector('[onclick="copyTranscript()"]');
+        const btn = event.target;
         const orig = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = orig, 2000);

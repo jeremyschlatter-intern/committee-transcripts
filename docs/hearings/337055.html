@@ -25,6 +25,7 @@
             </a>
             <div class="nav-links">
                 <a href="/committee-transcripts/">Home</a>
+                <a href="/committee-transcripts/search.html">Search</a>
                 <a href="/committee-transcripts/about.html">About</a>
                 <a href="/committee-transcripts/feed.xml" title="RSS Feed">RSS</a>
             </div>
@@ -81,7 +82,8 @@
         
         <a href="hearing_337055.epub" class="btn btn-secondary" download>Download EPUB</a>
         
-        <button class="btn btn-secondary" onclick="copyTranscript()">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(true)">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(false)">Copy (Plain Text)</button>
     </div>
 
     
@@ -98,7 +100,36 @@
                 <span>Segments: 688</span>
             </div>
             <p class="excerpts-note"><em>Selected substantive passages from the hearing (auto-extracted):</em></p>
-            <p>In 2019, the Department of Defense issued guidance that service members refrained from using direct consumer DNA testing kits when a consumer genetic genetics company accumulates the personal genomic blueprint of millions. In light of the serious evidence that COVID-19 was created in a Chinese laboratory, the weaponization of biologics and the military application of genomic data are no longer far from fantasies of science fiction. Glenn Cohn, Professor of Law at Harvard Law School and the Faculty Director of Harvard Center of Health Law Policy, Bio-Technology and Bioethics, Professor Cohn, is elected member of the National Academy of Medicine and is spoken to NATO, OECD, and members of the US and Korean Congress on Medical and Biotech issues and policies. People of interest and foreign adversaries certainly have a great interest in members of our military where they go what they do so that would certainly be a concern for me and we can be assured that they are looking at that and trying to use our service members genetic data you also mentioned aggregate large data sets have great value today for training AI models China is trying to build large data sets in every conceivable area but they have some gaps one of those gaps is that their population is not genetically diverse and so they may have a large number of DNA profiles in their country but they don't have the diversity that we have and that genetic diversity is very helpful if you want to train a model that is predictive for things benign like biomedical research but also things malevolent like bio weapons research. We have enhanced our security processes especially around bankruptcy understanding that there is additional threats and you know basically from under consumer side you know we have since enacted to factor authentication to acts of basically there is a second level of either an SMS text message or an email verification when somebody is trying to access their account. I recently served as a member of the National Security Commission on Emerging Biotechnology in our findings in a recent report found that the United States has historically not treated biological data as a strategic asset.</p>
+            
+            <div class="key-excerpts">
+                
+                <blockquote class="excerpt">
+                    <p>Good morning everybody. Genetic data is the blueprint to a person. It's sensitive, it's personal, and in the wrong hands it can be dangerous. As technology and biotechnology rapidly expand they bring new and serious challenges. Consumers deserve to know how their data is going to be used and Americans deserve protection from foreign threats. That's why we're here today. The 23 and me saga has unveiled serious and concerning issues regarding consumer protection, data privacy, and national security. We've explored these issues in this hearings, but today's</p>
+                    <cite><a class="ts" data-start="0.0" title="Jump to this point in video">[0:00]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>Professor Gottberg earned her BA in political science, made her come to Loddy, Brigham Young University, and her JD come to Loddy from Harvard Law School. Mr. Adam Klein is a senior lecturer at UT Austin School of Law and Director of the Strauss Center for International Security and Law. Previously Mr. Klein served as chairman of the CEO of the United States Privacy and Civil Liberties Oversight Board, overseeing counterterrorism programs at the NSA. FBI, CIA, and the Department of Homeland Security before entering government.</p>
+                    <cite><a class="ts" data-start="929.0" title="Jump to this point in video">[15:29]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>Many of our oversight projects revolved around the insights that intelligence agencies can gain from personal data. That is because data is not just another commodity. When our adversaries buy or steal sensitive American data, they use it to harm the United States. China in particular has used American data to strengthen its military, conduct hostile intelligence operations, and help its companies displace American competitors. Genomic data, like the DNA profiles held by 23 and me, presents several distinct national security risks.</p>
+                    <cite><a class="ts" data-start="1859.0" title="Jump to this point in video">[30:59]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>So it's not just policy makers that are worried about this. I think people all around the United States are now concerned of what happens to their very sensitive personal information. I think this is going to affect everything from data privacy to national security to potential biotech threats. And we cannot overstate the threat to this nation and to people individually. I think it's both going to be from a national security concern, but also private companies getting access to some of this data.</p>
+                    <cite><a class="ts" data-start="3422.0" title="Jump to this point in video">[57:02]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>So I'm afraid you'll have to explain what syphias is to me. All right. We had an x4 here. It's okay. It's okay. We'll do we'll go follow up with you because I my time is limited. I want to get to another topic which is national security and biotechnology. I recently served as a member of the National Security Commission on Emerging Biotechnology in our findings in a recent report found that the United States has historically not treated biological data as a strategic asset.</p>
+                    <cite><a class="ts" data-start="5251.0" title="Jump to this point in video">[1:27:31]</a></cite>
+                </blockquote>
+                
+            </div>
+            
         </div>
     </section>
     
@@ -591,7 +622,7 @@
             <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
             <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
             
-            <p class="footer-meta">Last updated: March 17, 2026 at 11:14 PM</p>
+            <p class="footer-meta">Last updated: March 17, 2026 at 11:25 PM</p>
             
         </div>
     </footer>
@@ -605,16 +636,20 @@ function toggleTimestamps() {
     });
 }
 
-function copyTranscript() {
+function copyTranscript(includeTimestamps) {
     const paras = document.querySelectorAll('.transcript-paragraph');
     let text = '';
     paras.forEach(p => {
-        const ts = p.querySelector('.ts').textContent;
         const content = p.querySelector('.segment-text').textContent;
-        text += ts + ' ' + content + '\n\n';
+        if (includeTimestamps) {
+            const ts = p.querySelector('.ts').textContent;
+            text += ts + ' ' + content + '\n\n';
+        } else {
+            text += content + '\n\n';
+        }
     });
     navigator.clipboard.writeText(text.trim()).then(() => {
-        const btn = document.querySelector('[onclick="copyTranscript()"]');
+        const btn = event.target;
         const orig = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = orig, 2000);

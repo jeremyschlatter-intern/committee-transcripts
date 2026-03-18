@@ -25,6 +25,7 @@
             </a>
             <div class="nav-links">
                 <a href="/committee-transcripts/">Home</a>
+                <a href="/committee-transcripts/search.html">Search</a>
                 <a href="/committee-transcripts/about.html">About</a>
                 <a href="/committee-transcripts/feed.xml" title="RSS Feed">RSS</a>
             </div>
@@ -81,7 +82,8 @@
         
         <a href="hearing_337435.epub" class="btn btn-secondary" download>Download EPUB</a>
         
-        <button class="btn btn-secondary" onclick="copyTranscript()">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(true)">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(false)">Copy (Plain Text)</button>
     </div>
 
     
@@ -98,7 +100,36 @@
                 <span>Segments: 1,685</span>
             </div>
             <p class="excerpts-note"><em>Selected substantive passages from the hearing (auto-extracted):</em></p>
-            <p>I'm grateful that President Trump and Secretary McMahon are committed to reforming our broken education system so that it works better for American students and their families. We lack direct evidence of a causal link between smartphones and learning, but I'm convinced that this technology is a key driver of youth mental health challenges, a distraction from learning both inside and outside of schools, and a deterrent to reading when NAPE surveys reveal that many fewer students read on their own for fun. As we speak, the president and the secretary of the department, Secretary McMahon, have delayed billions of dollars of funding and canceled critical grant programs. So in the midst of all of this chaos that we are seeing at the Department of Education, I am really concerned about the latest results of the National Report Card which came out this month because it does show that while Trump is pushing ahead with tearing apart the Department of Education and ripping resources away from our students, our kids are continuing to fall behind. Trump cut $1 billion in funding for mental health care in schools, including a program in Massachusetts training 50 school psychologists to work in high-need districts. So for months, Trump administration illegally withheld $7 billion in funding, including $108 million from Massachusetts that supports English learners after school programs and more throwing school and town budgets across Massachusetts and the country into chaos.</p>
+            
+            <div class="key-excerpts">
+                
+                <blockquote class="excerpt">
+                    <p>And of course, we got the kind of results you'd expect from that lack of specialized diagnosis and treatment. Now, we have specialized care for each type and we've dramatically improved patient outcomes. We need the same approach for literacy. This includes ensuring federal resources can be used towards early detection screening for learning needs, like dyslexia, that causes students to struggle reading. I'm grateful that President Trump and Secretary McMahon are committed to reforming our broken education system so that it works better for American students and their families.</p>
+                    <cite><a class="ts" data-start="1137.08" title="Jump to this point in video">[18:57]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>As a state leader, I find that for any progress, it has to take hold at the community level. Our community is moving the fastest or those who have key change agents, from education and business coming together to set common goals and an action plan. I often hear Katie, we're really trying to open this opportunity for kids, but there's a law on the way, or a policy on the way, or funding flexibility that we need. So my ask to you is similar to what I demand to myself.</p>
+                    <cite><a class="ts" data-start="2557.02" title="Jump to this point in video">[42:37]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>engage, then they see a pathway and why it matters. Thank you, Mr. Chairman. Senator Baldwin. Thank you, Mr. Chairman. And thank you to all of our panelists today. I have some strong concerns about what's happening at the federal level as it overlays to the discussion in front of us, especially about effective teachers. As we speak, the president and the secretary of the department, Secretary McMahon, have delayed billions of dollars of funding and canceled critical grant programs. Really cut the legs out from the Department of Education by firing nearly half of the staff.</p>
+                    <cite><a class="ts" data-start="4374.0199999999995" title="Jump to this point in video">[1:12:54]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>need to address because of your particular position? I thought you'd be the best one. Do you expect that we will do so in a meaningful way so that you can really capture these new this education surge and non-traditional schooling that states are making? That's very well said, Senator Moody. You put your finger on probably the most important question facing the NAEP program in the near future, which is the status of private school participation. Private schools do participate in the NAEP at the national level.</p>
+                    <cite><a class="ts" data-start="5598.54" title="Jump to this point in video">[1:33:18]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>Trump cut $1 billion in funding for mental health care in schools, including a program in Massachusetts training 50 school psychologists to work in high-need districts. So for months, Trump administration illegally withheld $7 billion in funding, including $108 million from Massachusetts that supports English learners after school programs and more throwing school and town budgets across Massachusetts and the country into chaos. And congressional Republicans passed a big ugly bill, which slashed $8 trillion from Medicaid and SNAP. Schools receive</p>
+                    <cite><a class="ts" data-start="8232.86" title="Jump to this point in video">[2:17:12]</a></cite>
+                </blockquote>
+                
+            </div>
+            
         </div>
     </section>
     
@@ -836,7 +867,7 @@
             <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
             <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
             
-            <p class="footer-meta">Last updated: March 17, 2026 at 11:14 PM</p>
+            <p class="footer-meta">Last updated: March 17, 2026 at 11:25 PM</p>
             
         </div>
     </footer>
@@ -850,16 +881,20 @@ function toggleTimestamps() {
     });
 }
 
-function copyTranscript() {
+function copyTranscript(includeTimestamps) {
     const paras = document.querySelectorAll('.transcript-paragraph');
     let text = '';
     paras.forEach(p => {
-        const ts = p.querySelector('.ts').textContent;
         const content = p.querySelector('.segment-text').textContent;
-        text += ts + ' ' + content + '\n\n';
+        if (includeTimestamps) {
+            const ts = p.querySelector('.ts').textContent;
+            text += ts + ' ' + content + '\n\n';
+        } else {
+            text += content + '\n\n';
+        }
     });
     navigator.clipboard.writeText(text.trim()).then(() => {
-        const btn = document.querySelector('[onclick="copyTranscript()"]');
+        const btn = event.target;
         const orig = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = orig, 2000);

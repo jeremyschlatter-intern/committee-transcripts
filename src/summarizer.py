@@ -134,6 +134,119 @@ def extractive_summary(transcript, num_sentences=10):
     return ' '.join(selected)
 
 
+def extract_key_excerpts(transcript, num_excerpts=5):
+    """Extract individual key excerpts with timestamps from transcript segments.
+
+    Returns a list of dicts with 'text', 'start', 'end' for each excerpt.
+    Unlike extractive_summary which returns a wall of text, this preserves
+    structure for better display as individual blockquotes.
+    """
+    segments = transcript.get("segments", [])
+    if not segments:
+        return []
+
+    # Build consolidated passages from segments (groups of ~30s)
+    passages = []
+    current_text = []
+    current_start = segments[0].get("start", 0)
+    current_end = 0
+
+    for seg in segments:
+        text = seg.get("text", "").strip()
+        if not text or _is_noise_text(text):
+            continue
+        start = seg.get("start", 0)
+        end = seg.get("end", start)
+
+        if current_text and (start - current_end > 15 or len(" ".join(current_text).split()) > 80):
+            passage = " ".join(current_text)
+            if len(passage.split()) >= 15 and not _is_procedural(passage):
+                passages.append({
+                    "text": passage,
+                    "start": current_start,
+                    "end": current_end,
+                })
+            current_text = [text]
+            current_start = start
+        else:
+            current_text.append(text)
+        current_end = end
+
+    # Don't forget last passage
+    if current_text:
+        passage = " ".join(current_text)
+        if len(passage.split()) >= 15 and not _is_procedural(passage):
+            passages.append({
+                "text": passage,
+                "start": current_start,
+                "end": current_end,
+            })
+
+    if not passages:
+        return []
+
+    # Score passages
+    scored = []
+    for i, p in enumerate(passages):
+        score = 0
+        pl = p["text"].lower()
+        words = p["text"].split()
+        word_count = len(words)
+
+        # Substantive keywords
+        topic_words = ['billion', 'million', 'percent', 'funding', 'budget', 'program',
+                       'legislation', 'amendment', 'investigation', 'oversight', 'reform',
+                       'security', 'policy', 'department', 'secretary', 'director',
+                       'cost', 'infrastructure', 'military', 'education', 'health',
+                       'housing', 'environment', 'energy', 'technology', 'court',
+                       'report', 'found', 'evidence', 'concern', 'challenge', 'threat',
+                       'recommend', 'critical', 'important', 'significant']
+        for w in topic_words:
+            if w in pl:
+                score += 2
+
+        # Prefer medium-length passages (30-80 words)
+        if 30 <= word_count <= 80:
+            score += 5
+        elif 15 <= word_count <= 30:
+            score += 2
+
+        # Penalize garbled text (sentences that don't end properly)
+        if not p["text"].rstrip().endswith(('.', '!', '?', '"')):
+            score -= 3
+
+        # Penalize if contains many short fragments or numbers without context
+        if re.search(r'\d{5,}', pl):
+            score -= 5
+
+        # Position diversity - spread excerpts across the hearing
+        position = i / len(passages) if passages else 0
+        p["_position"] = position
+
+        scored.append((score, i, p))
+
+    # Pick top-scoring, but ensure temporal spread
+    scored.sort(key=lambda x: x[0], reverse=True)
+
+    selected = []
+    selected_positions = []
+    for score, idx, passage in scored:
+        if len(selected) >= num_excerpts:
+            break
+        # Ensure excerpts are spread across the hearing (at least 10% apart)
+        pos = passage["_position"]
+        if any(abs(pos - sp) < 0.1 for sp in selected_positions):
+            continue
+        # Clean up the passage text
+        del passage["_position"]
+        selected.append(passage)
+        selected_positions.append(pos)
+
+    # Sort by timestamp
+    selected.sort(key=lambda x: x["start"])
+    return selected
+
+
 def generate_summary(transcript, hearing_info=None):
     """Generate a summary for a hearing transcript.
 
@@ -150,6 +263,9 @@ def generate_summary(transcript, hearing_info=None):
 
     # Extract key overview
     overview = extractive_summary(transcript, num_sentences=6)
+
+    # Extract structured key excerpts with timestamps
+    key_excerpts = extract_key_excerpts(transcript, num_excerpts=5)
 
     # Build hearing context
     context = ""
@@ -168,6 +284,7 @@ def generate_summary(transcript, hearing_info=None):
 
     return {
         "overview": overview,
+        "key_excerpts": key_excerpts,
         "context": context,
         "statistics": {
             "word_count": word_count,

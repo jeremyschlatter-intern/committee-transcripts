@@ -304,6 +304,38 @@ def generate_site(base_url="/committee-transcripts/"):
 
     print(f"  Generated: {len(committees)} committee pages")
 
+    # Generate search page with cross-hearing search index
+    search_index = []
+    for h in hearings:
+        event_id = h["event_id"]
+        info = h["info"]
+        raw_segments = h["transcript"].get("segments", [])
+        consolidated = _consolidate_segments(raw_segments)
+        paragraphs = []
+        for para in consolidated:
+            paragraphs.append({
+                "text": para["text"],
+                "ts": format_timestamp(para["start"]),
+            })
+        search_index.append({
+            "title": _clean_title(info.get("title", "Untitled")) or info.get("title", "Untitled"),
+            "url": f"{base_url}hearings/{event_id}.html",
+            "date": info.get("date", "")[:10],
+            "chamber": info.get("chamber", ""),
+            "committee": ", ".join(c.get("name", "") for c in info.get("committees", [])),
+            "paragraphs": paragraphs,
+        })
+
+    search_template = env.get_template("search.html")
+    html = search_template.render(
+        search_index=search_index,
+        total_hearings=len(hearings),
+        **common_vars,
+    )
+    with open(os.path.join(OUTPUT_DIR, "search.html"), 'w') as f:
+        f.write(html)
+    print("  Generated: search.html")
+
     # Generate about page
     about_template = env.get_template("about.html")
     html = about_template.render(

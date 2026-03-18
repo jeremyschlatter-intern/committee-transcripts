@@ -52,7 +52,11 @@
                     {% endif %}
 
                     {% if hearing.summary %}
+                    {% if hearing.summary.key_excerpts %}
+                    <p class="hearing-excerpt">{{ hearing.summary.key_excerpts[0].text | truncate_words(40) }}</p>
+                    {% else %}
                     <p class="hearing-excerpt">{{ hearing.summary.overview | truncate_words(40) }}</p>
+                    {% endif %}
                     <div class="hearing-stats">
                         <span>~{{ hearing.summary.statistics.duration_minutes }} min</span>
                         <span>{{ "{:,}".format(hearing.summary.statistics.word_count) }} words</span>

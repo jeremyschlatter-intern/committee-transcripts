@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Search All Transcripts | Committee Proceeding Transcripts{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Search All Transcripts</h1>
+    <p class="search-description">Search across the full text of all {{ total_hearings }} hearing transcripts.</p>
+
+    <div class="search-bar">
+        <input type="text" id="global-search" placeholder="Search all transcripts (e.g., Section 702, fentanyl, housing authority)..." class="search-input" autofocus>
+    </div>
+
+    <div id="search-status" class="search-status" style="display:none;"></div>
+
+    <div id="search-results" class="search-results"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var searchIndex = {{ search_index | tojson }};
+
+var debounceTimer;
+document.getElementById('global-search').addEventListener('input', function(e) {
+    clearTimeout(debounceTimer);
+    var query = e.target.value.trim();
+    if (query.length < 2) {
+        document.getElementById('search-results').innerHTML = '';
+        document.getElementById('search-status').style.display = 'none';
+        return;
+    }
+    debounceTimer = setTimeout(function() { performSearch(query); }, 300);
+});
+
+function performSearch(query) {
+    var resultsDiv = document.getElementById('search-results');
+    var statusDiv = document.getElementById('search-status');
+    var queryLower = query.toLowerCase();
+    var queryWords = queryLower.split(/\s+/).filter(function(w) { return w.length > 0; });
+
+    var results = [];
+
+    searchIndex.forEach(function(hearing) {
+        var matches = [];
+        hearing.paragraphs.forEach(function(para) {
+            var textLower = para.text.toLowerCase();
+            var allMatch = queryWords.every(function(word) {
+                return textLower.indexOf(word) !== -1;
+            });
+            if (allMatch) {
+                matches.push(para);
+            }
+        });
+
+        if (matches.length > 0) {
+            results.push({
+                title: hearing.title,
+                url: hearing.url,
+                date: hearing.date,
+                chamber: hearing.chamber,
+                committee: hearing.committee,
+                matches: matches,
+                matchCount: matches.length
+            });
+        }
+    });
+
+    // Sort by number of matches
+    results.sort(function(a, b) { return b.matchCount - a.matchCount; });
+
+    // Display results
+    var totalMatches = results.reduce(function(sum, r) { return sum + r.matchCount; }, 0);
+    statusDiv.style.display = 'block';
+    statusDiv.textContent = totalMatches + ' match' + (totalMatches !== 1 ? 'es' : '') +
+        ' across ' + results.length + ' hearing' + (results.length !== 1 ? 's' : '');
+
+    var html = '';
+    results.forEach(function(result) {
+        html += '<div class="search-result-hearing">';
+        html += '<div class="search-result-header">';
+        html += '<span class="badge badge-' + result.chamber.toLowerCase() + '">' + result.chamber + '</span> ';
+        html += '<a href="' + result.url + '">' + result.title + '</a>';
+        html += '<span class="search-match-count">' + result.matchCount + ' match' + (result.matchCount !== 1 ? 'es' : '') + '</span>';
+        html += '</div>';
+        html += '<div class="search-result-meta">' + result.date + ' &mdash; ' + result.committee + '</div>';
+
+        // Show up to 3 matching excerpts
+        var shown = Math.min(result.matches.length, 3);
+        for (var i = 0; i < shown; i++) {
+            var para = result.matches[i];
+            var text = para.text;
+            // Highlight matches
+            queryWords.forEach(function(word) {
+                var regex = new RegExp('(' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                text = text.replace(regex, '<mark>$1</mark>');
+            });
+            // Truncate to ~200 chars around first match
+            var plainText = para.text;
+            var firstIdx = plainText.toLowerCase().indexOf(queryWords[0]);
+            var contextStart = Math.max(0, firstIdx - 80);
+            var contextEnd = Math.min(plainText.length, firstIdx + 200);
+            var snippet = (contextStart > 0 ? '...' : '') +
+                plainText.substring(contextStart, contextEnd) +
+                (contextEnd < plainText.length ? '...' : '');
+            // Re-highlight on snippet
+            queryWords.forEach(function(word) {
+                var regex = new RegExp('(' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                snippet = snippet.replace(regex, '<mark>$1</mark>');
+            });
+
+            html += '<div class="search-result-excerpt">';
+            html += '<span class="search-ts">[' + para.ts + ']</span> ';
+            html += snippet;
+            html += '</div>';
+        }
+        if (result.matches.length > 3) {
+            html += '<div class="search-more">...and ' + (result.matches.length - 3) + ' more matches</div>';
+        }
+        html += '</div>';
+    });
+
+    if (results.length === 0) {
+        html = '<div class="search-no-results">No results found for "' + query.replace(/</g, '&lt;') + '". Try different search terms.</div>';
+    }
+
+    resultsDiv.innerHTML = html;
+}
+</script>
+{% endblock %}

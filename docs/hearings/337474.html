@@ -25,6 +25,7 @@
             </a>
             <div class="nav-links">
                 <a href="/committee-transcripts/">Home</a>
+                <a href="/committee-transcripts/search.html">Search</a>
                 <a href="/committee-transcripts/about.html">About</a>
                 <a href="/committee-transcripts/feed.xml" title="RSS Feed">RSS</a>
             </div>
@@ -81,7 +82,8 @@
         
         <a href="hearing_337474.epub" class="btn btn-secondary" download>Download EPUB</a>
         
-        <button class="btn btn-secondary" onclick="copyTranscript()">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(true)">Copy Transcript</button>
+        <button class="btn btn-secondary" onclick="copyTranscript(false)">Copy (Plain Text)</button>
     </div>
 
     
@@ -98,7 +100,36 @@
                 <span>Segments: 2,143</span>
             </div>
             <p class="excerpts-note"><em>Selected substantive passages from the hearing (auto-extracted):</em></p>
-            <p>As Assistant Secretary for Policy at the Department of Labor, Mr. And unless we bring together a whole lot of people to tell the billionaires in this country that we want an economy that works for all of us, that AI can be a good thing in healthcare and many other things. I want to share a story about AI-driven Grab-and-Go self-checkout machines at Fenway Park as an example of how technology can one lead to the loss of good middle-class jobs, two, create unintended public health and safety concerns, and three, diminished social interaction and harm cultural experience. Other things that we know are the foundations for evidence-based teaching and that through that fine tuning, through that additional training, that's how you help address some of these other challenges. And I am listening after we offered up the opportunity for the sixth time to vote in a bipartisan way to continue funding to keep our government open so that our military, federal employees all can continue to get paid and not miss a paycheck that we are coming in here to gaslight the American people and suggest that it's anything other than Democrats not voting to continue funding of our government. We see Amazon workers breaking their own backs to meet technology fuel, worksp quotas, delivery drivers whose livelihoods are determined by black box algorithms, retail workers under constant surveillance, grocery clerks replaced by machines, home health aids and housekeepers managed and fired by apps, the list goes on and on.</p>
+            
+            <div class="key-excerpts">
+                
+                <blockquote class="excerpt">
+                    <p>It confirmed to the National Labor Relations Board Mr. Jim Murphy and Mr. Crystal Carey will prioritize workers and ensure that their rights are protected under federal law. They'll restore stability for both workers and employers and work to clear the backlog of cases left by the Biden administration. As Assistant Secretary for Policy at the Department of Labor, Mr. Rosario Pomiari will work with Congress to modernize the Department of Labor, creating greater flexibility for states to administer workforce programs.</p>
+                    <cite><a class="ts" data-start="1050.0" title="Jump to this point in video">[17:30]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>work, happier and healthier workers, lower levels of turnover. This is a common sense solution to problems facing both employees and employers, as well as the potential of AI to destroy jobs. Well AI can bring many benefits. It also has multiple negative impacts that I have not addressed here. In my field higher education, AI has created a crisis of cheating and plagiarism. There is growing evidence of its role in disseminating misinformation and undermining democracy. And there is concern about the adverse impacts of humans interacting with AI agents.</p>
+                    <cite><a class="ts" data-start="3874.34" title="Jump to this point in video">[1:04:34]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>data center infrastructure are equitably distributed? And what might we do without curtailing innovation? Thank you, Senator. I appreciate why you're raising the issue because it is an important issue both in the impact on those who live around the data centers as well as the jurisdictions that host them. They have tax revenue implications, large tax revenue. I believe in Loudon County in Virginia, an enormous percentage of the county's budget comes from data center tax revenues. So they can be a boon, but you're right.</p>
+                    <cite><a class="ts" data-start="6231.2" title="Jump to this point in video">[1:43:51]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>lot of people are watching this hearing and again I commend our chairman for holding this hearing so important, like the one that we had yesterday. In fact this committee, when you're dealing with health education, labor, pensions, it deals with so many facets of American life and American safety. These are majority minority witnesses, a bipartisan group of people who are all saying, companies that are trying to push this technology fast for whatever reason should be held accountable for the harm and damage that it causes.</p>
+                    <cite><a class="ts" data-start="7328.12" title="Jump to this point in video">[2:02:08]</a></cite>
+                </blockquote>
+                
+                <blockquote class="excerpt">
+                    <p>Oh, it's been fine for the last couple of weeks. I don't really have to read this and I don't really have to think critically. And we all worry about that. So how you work it into the workflow of clinicians and healthcare workers in general so that they maintain their professional skepticism about whatever the AI is saying, just like they have skepticism when their colleagues make recommendations. On the research side, I think it's a little bit clearer. We already talked a little bit in this discussion about biosecurity.</p>
+                    <cite><a class="ts" data-start="8949.86" title="Jump to this point in video">[2:29:09]</a></cite>
+                </blockquote>
+                
+            </div>
+            
         </div>
     </section>
     
@@ -806,7 +837,7 @@
             <p>Committee Proceeding Transcripts &mdash; Auto-generated transcripts of congressional committee hearings.</p>
             <p class="footer-meta">Data sourced from Congress.gov and committee video streams. Transcripts generated using AI speech recognition.</p>
             
-            <p class="footer-meta">Last updated: March 17, 2026 at 11:14 PM</p>
+            <p class="footer-meta">Last updated: March 17, 2026 at 11:25 PM</p>
             
         </div>
     </footer>
@@ -820,16 +851,20 @@ function toggleTimestamps() {
     });
 }
 
-function copyTranscript() {
+function copyTranscript(includeTimestamps) {
     const paras = document.querySelectorAll('.transcript-paragraph');
     let text = '';
     paras.forEach(p => {
-        const ts = p.querySelector('.ts').textContent;
         const content = p.querySelector('.segment-text').textContent;
-        text += ts + ' ' + content + '\n\n';
+        if (includeTimestamps) {
+            const ts = p.querySelector('.ts').textContent;
+            text += ts + ' ' + content + '\n\n';
+        } else {
+            text += content + '\n\n';
+        }
     });
     navigator.clipboard.writeText(text.trim()).then(() => {
-        const btn = document.querySelector('[onclick="copyTranscript()"]');
+        const btn = event.target;
         const orig = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = orig, 2000);
