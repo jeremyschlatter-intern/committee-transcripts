@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ hearing.title }} | Committee Transcripts{% endblock %}
+{% block title %}{{ hearing.title | clean_title }} | Committee Transcripts{% endblock %}
 
 {% block head %}
 <style>
@@ -18,7 +18,7 @@
         <a href="{{ base_url }}">Home</a> &raquo;
         {% if hearing.committees %}
         {% for c in hearing.committees %}
-        <a href="{{ base_url }}committees/{{ c.name | lower | replace(' ', '-') | truncate(80, True, '') }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
+        <a href="{{ base_url }}committees/{{ c.name | slugify }}.html">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
         {% endfor %}
         &raquo;
         {% endif %}
@@ -33,7 +33,7 @@
             <span class="badge">{{ hearing.type }}</span>
             {% endif %}
         </div>
-        <h1>{{ hearing.title }}</h1>
+        <h1>{{ hearing.title | clean_title }}</h1>
 
         {% if hearing.committees %}
         <p class="hearing-committee-name">
@@ -43,8 +43,13 @@
 
         {% if hearing.location %}
         <p class="hearing-location">
-            {% if hearing.location.room %}{{ hearing.location.room }}{% endif %}
-            {% if hearing.location.building %}, {{ hearing.location.building }}{% endif %}
+            {% if hearing.location is mapping %}
+                {% if hearing.location.room %}{{ hearing.location.room }}{% endif %}
+                {% if hearing.location.building %}, {{ hearing.location.building }}{% endif %}
+                {% if hearing.location.address %}{{ hearing.location.address }}{% endif %}
+            {% else %}
+                {{ hearing.location }}
+            {% endif %}
         </p>
         {% endif %}
     </header>
@@ -106,13 +111,14 @@
 
     {% if summary %}
     <section class="section summary-section">
-        <h2>Summary</h2>
+        <h2>Key Excerpts</h2>
         <div class="summary-box">
             <div class="summary-stats">
                 <span>Duration: ~{{ summary.statistics.duration_minutes }} minutes</span>
                 <span>Words: {{ "{:,}".format(summary.statistics.word_count) }}</span>
                 <span>Segments: {{ "{:,}".format(summary.statistics.segment_count) }}</span>
             </div>
+            <p class="excerpts-note"><em>Selected substantive passages from the hearing (auto-extracted):</em></p>
             <p>{{ summary.overview }}</p>
         </div>
     </section>

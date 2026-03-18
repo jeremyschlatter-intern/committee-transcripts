@@ -141,6 +141,7 @@ def generate_site(base_url="/committee-transcripts/"):
     # Set up Jinja environment
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     env.filters['format_timestamp'] = format_timestamp
+    env.filters['slugify'] = _slugify
     def _format_date(d):
         if not d:
             return 'Unknown'
@@ -151,6 +152,7 @@ def generate_site(base_url="/committee-transcripts/"):
             return d[:10] if d else 'Unknown'
     env.filters['format_date'] = _format_date
     env.filters['truncate_words'] = lambda s, n=30: ' '.join(s.split()[:n]) + ('...' if len(s.split()) > n else '')
+    env.filters['clean_title'] = _clean_title
 
     # Prepare output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -265,12 +267,37 @@ def generate_site(base_url="/committee-transcripts/"):
 
 def _slugify(text):
     """Convert text to URL-friendly slug."""
-    import re
     slug = text.lower()
     slug = re.sub(r'[^a-z0-9\s-]', '', slug)
     slug = re.sub(r'[\s]+', '-', slug)
     slug = re.sub(r'-+', '-', slug)
     return slug.strip('-')[:80]
+
+
+def _clean_title(title):
+    """Clean up verbose Senate hearing title format for display."""
+    if not title:
+        return title
+    # Normalize non-breaking spaces
+    normalized = title.replace('\xa0', ' ')
+    # Strip "Hearings to examine " prefix
+    prefixes = [
+        "Hearings to examine ",
+        "Hearing to examine ",
+        "Hearings to consider ",
+        "Hearing to consider ",
+    ]
+    for prefix in prefixes:
+        if normalized.startswith(prefix):
+            cleaned = normalized[len(prefix):]
+            # Capitalize the first letter
+            if cleaned:
+                cleaned = cleaned[0].upper() + cleaned[1:]
+            # Remove trailing period
+            if cleaned.endswith('.'):
+                cleaned = cleaned[:-1]
+            return cleaned
+    return title
 
 
 if __name__ == "__main__":
