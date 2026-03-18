@@ -34,7 +34,34 @@ def _is_noise_segment(text):
     # Very short nonsense
     if len(words) <= 2 and all(w in noise_words for w in words):
         return True
+    # Pre-hearing technical chatter (phone numbers, audio checks)
+    if re.search(r'\d{7,}', text) and len(words) < 15:
+        return True
+    if re.search(r'\d{3,4}-\s*\d{0,7}', text) and len(words) < 20:
+        return True
+    if 'audio hot' in text:
+        return True
     return False
+
+
+def _remove_repeated_segments(segments):
+    """Remove segments that repeat frequently (pre-hearing audio checks, loops)."""
+    if not segments:
+        return segments
+
+    from collections import Counter
+    # Count normalized text occurrences
+    text_counts = Counter()
+    for s in segments:
+        normalized = s.get('text', '').strip().lower()
+        if len(normalized) > 10:  # Only count substantive segments
+            text_counts[normalized] += 1
+
+    # Texts that appear 3+ times are likely noise/loops
+    repeated_texts = {t for t, c in text_counts.items() if c >= 3}
+
+    return [s for s in segments
+            if s.get('text', '').strip().lower() not in repeated_texts]
 
 
 def _consolidate_segments(segments, group_seconds=30):
@@ -44,6 +71,8 @@ def _consolidate_segments(segments, group_seconds=30):
 
     # Filter noise first
     clean = [s for s in segments if not _is_noise_segment(s.get('text', ''))]
+    # Remove repeated/looped segments (pre-hearing audio checks etc.)
+    clean = _remove_repeated_segments(clean)
     if not clean:
         return []
 

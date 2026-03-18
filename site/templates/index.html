@@ -101,10 +101,21 @@
 {% block scripts %}
 <script>
 document.getElementById('hearing-search').addEventListener('input', function(e) {
-    const query = e.target.value.toLowerCase();
+    const query = e.target.value.toLowerCase().trim();
+    if (!query) {
+        document.querySelectorAll('.hearing-card').forEach(function(card) { card.style.display = ''; });
+        return;
+    }
+    // Use word-boundary matching: split query into words, all must match
+    const queryWords = query.split(/\s+/);
     document.querySelectorAll('.hearing-card').forEach(function(card) {
         const searchable = card.getAttribute('data-searchable');
-        card.style.display = searchable.includes(query) ? '' : 'none';
+        // Each query word must appear as a whole word (word boundary match)
+        const matches = queryWords.every(function(word) {
+            const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+            return regex.test(searchable);
+        });
+        card.style.display = matches ? '' : 'none';
     });
 });
 </script>
