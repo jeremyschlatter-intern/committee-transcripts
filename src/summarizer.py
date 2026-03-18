@@ -40,8 +40,10 @@ def _is_procedural(sentence):
         r'\brecognize[ds]?\s+(the\s+)?(gentleman|gentlewoman|gentlelady|member)\b',
         r'\bfive\s+(legislative\s+)?days?\b',
         r'\bsubmit\s+(additional\s+)?written\s+questions?\b',
+        r'\bwritten\s+questions\s+(can|will|may)\s+be\s+submitted\b',
         r'\bopening\s+statement\b',
         r'\bpledge\s+of\s+allegiance\b',
+        r'\bquestions\s+for\s+the\s+record\b',
     ]
     for pattern in procedural_patterns:
         if re.search(pattern, s):
@@ -215,6 +217,13 @@ def extract_key_excerpts(transcript, num_excerpts=5):
         if not p["text"].rstrip().endswith(('.', '!', '?', '"')):
             score -= 3
 
+        # Penalize mid-sentence fragments (starts with lowercase or conjunction)
+        first_word = p["text"].split()[0] if p["text"].split() else ""
+        if first_word and first_word[0].islower():
+            score -= 5
+        if first_word.lower() in ('and', 'but', 'or', 'so', 'because', 'also', 'however'):
+            score -= 4
+
         # Penalize if contains many short fragments or numbers without context
         if re.search(r'\d{5,}', pl):
             score -= 5
@@ -225,6 +234,10 @@ def extract_key_excerpts(transcript, num_excerpts=5):
 
         # Penalize very early content (often procedural opening)
         if p["start"] < 60:
+            score -= 3
+
+        # Penalize "thank you" openings (transitions between speakers)
+        if pl.startswith('thank you'):
             score -= 3
 
         # Position diversity - spread excerpts across the hearing
