@@ -219,6 +219,14 @@ def extract_key_excerpts(transcript, num_excerpts=5):
         if re.search(r'\d{5,}', pl):
             score -= 5
 
+        # Penalize procedural content
+        if _is_procedural(p["text"]):
+            score -= 10
+
+        # Penalize very early content (often procedural opening)
+        if p["start"] < 60:
+            score -= 3
+
         # Position diversity - spread excerpts across the hearing
         position = i / len(passages) if passages else 0
         p["_position"] = position
