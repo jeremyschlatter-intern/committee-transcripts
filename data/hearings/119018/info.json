@@ -27,5 +27,48 @@
       "url": "https://www.youtube.com/watch?v=VvtF9nLCOxs",
       "title": ""
     }
-  ]
+  ],
+  "meetingDocuments": [
+    {
+      "name": "HON Marks Bio",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD001.pdf"
+    },
+    {
+      "name": "HON Rogers Bio",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD002.pdf"
+    },
+    {
+      "name": "Hon Gillis Bio",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD003.pdf"
+    },
+    {
+      "name": "HON Borders Bio",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD004.pdf"
+    },
+    {
+      "name": "HON Marks Statement",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD005.pdf"
+    },
+    {
+      "name": "HON Rogers Statement",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD006.pdf"
+    },
+    {
+      "name": "HON Borders Statement",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD007.pdf"
+    },
+    {
+      "name": "HON Gillis Statement",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119018/documents/HHRG-119-AS03-20260304-SD008.pdf"
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/house-event/119018"
 }

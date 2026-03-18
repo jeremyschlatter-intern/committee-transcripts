@@ -370,6 +370,28 @@ body {
     margin-bottom: 0.75rem;
 }
 
+/* Documents */
+.documents-list { margin-top: 0.5rem; }
+.documents-list summary {
+    cursor: pointer;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+}
+.documents-list summary:hover { color: var(--blue); }
+.documents-list ul {
+    margin: 0.5rem 0 0 1.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.documents-list li {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+.documents-list a { color: var(--blue); text-decoration: none; }
+.documents-list a:hover { text-decoration: underline; }
+
 /* Transcript */
 .transcript-controls {
     display: flex;

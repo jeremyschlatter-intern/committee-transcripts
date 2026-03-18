@@ -84,6 +84,26 @@
     </section>
     {% endif %}
 
+    {% if hearing.meetingDocuments %}
+    <section class="section">
+        <h2>Related Documents</h2>
+        <details class="documents-list">
+            <summary>{{ hearing.meetingDocuments | length }} document{{ 's' if hearing.meetingDocuments | length > 1 }} submitted for the record</summary>
+            <ul>
+                {% for doc in hearing.meetingDocuments %}
+                <li>
+                    {% if doc.url %}
+                    <a href="{{ doc.url }}" target="_blank" rel="noopener">{{ doc.name or doc.type or 'Document' }}</a>
+                    {% else %}
+                    {{ doc.name or doc.type or 'Document' }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </details>
+    </section>
+    {% endif %}
+
     {% if summary %}
     <section class="section summary-section">
         <h2>Summary</h2>

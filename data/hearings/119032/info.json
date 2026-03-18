@@ -47,5 +47,18 @@
       "url": "https://www.youtube.com/watch?v=d_Db7k5ig7k",
       "title": ""
     }
-  ]
+  ],
+  "meetingDocuments": [
+    {
+      "name": "Notice",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119032/documents/HHRG-119-BA09-20260313-SD001.pdf"
+    },
+    {
+      "name": "Memorandum",
+      "type": "",
+      "url": "https://www.congress.gov/119/meeting/house/119032/documents/HHRG-119-BA09-20260313-SD002.pdf"
+    }
+  ],
+  "congressGovUrl": "https://www.congress.gov/event/119th-Congress/house-event/119032"
 }

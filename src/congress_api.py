@@ -113,6 +113,46 @@ def extract_meeting_info(meeting_detail):
     }
 
 
+def enrich_hearing_info(info):
+    """Enrich hearing info with meetingDocuments and Congress.gov links.
+
+    Connects to the Unified Hearing & Markup Data by adding:
+    - meetingDocuments (witness statements, related bills, etc.)
+    - Congress.gov hearing page URL
+    - Associated printed hearing record if available
+    """
+    event_id = info.get("eventId")
+    chamber = info.get("chamber", "").lower()
+    congress = info.get("congress", 119)
+
+    if not event_id or not chamber:
+        return info
+
+    # Fetch full meeting detail to get documents
+    try:
+        detail = get_committee_meeting_detail(congress, chamber, event_id)
+        meeting = detail.get("committeeMeeting", {})
+
+        # Extract meeting documents
+        documents = []
+        for doc in meeting.get("meetingDocuments", []):
+            documents.append({
+                "name": doc.get("name", ""),
+                "type": doc.get("type", ""),
+                "url": doc.get("url", ""),
+            })
+        if documents:
+            info["meetingDocuments"] = documents
+
+        # Add Congress.gov event page URL
+        info["congressGovUrl"] = f"https://www.congress.gov/event/{congress}th-Congress/{chamber}-event/{event_id}"
+
+    except requests.HTTPError:
+        pass
+
+    return info
+
+
 def discover_recent_hearings(days_back=30, chamber=None):
     """Discover recent hearings with video available.
 
